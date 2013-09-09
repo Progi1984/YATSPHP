@@ -7,6 +7,6 @@
     <h2>Hello {{thingi alt="test"}}.</h2>
     <h2>Hello {{thingi}}.</h2>
     <hr>
-    <a href="sample2.php">Next</a>
+    <a href="sample02.php">Next</a>
   </body>
 </html>

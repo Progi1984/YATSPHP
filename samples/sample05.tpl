@@ -1,0 +1,31 @@
+<html><body>
+
+<h1>Sample5: Sections - autohide</h1>
+
+<p>
+  There are {{count_flavor}} flavors. There is no value for "stench".
+</p>
+
+
+<h2>section with autohide="no"</h2>
+<ol>
+
+  {{section:flavors}}
+  <li>flavor: "{{flavor}}" stench: "{{stench}}" </li>
+  {{/section:flavors}}
+
+</ol>
+
+<h2>section with autohide=yes</h2>
+<ol>
+
+  {{section:flavors autohide="yes"}}
+  <li>flavor: "{{flavor}}" stench: "{{stench}}" </li>
+  {{/section:flavors}}
+
+</ol>
+
+<hr>
+<a href="sample4.php">Previous</a> | <a href="sample6.php">Next</a>
+
+</body></html>
