@@ -76,7 +76,18 @@ class YATSPHP {
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
       foreach ($arrResult[1] as $key => $sFileInclude){
         $oYATS = new YATSPHP();
-        $oYATS->define($sFileInclude, (is_null($this->_docroot) ? dirname($this->_template).DIRECTORY_SEPARATOR : $this->_docroot));
+        $sDocRoot = null;
+        if(is_null($this->_docroot)){
+          $sDocRoot = dirname($this->_template).DIRECTORY_SEPARATOR;
+        } else {
+          if(substr($sFileInclude, 0, 2) == './'){
+            $sDocRoot = dirname($this->_template).DIRECTORY_SEPARATOR;
+            $sFileInclude = substr($sFileInclude, 2);
+          } else {
+            $sDocRoot = $this->_docroot;
+          }
+        }
+        $oYATS->define($sFileInclude, $sDocRoot);
         $oYATS->assign($this->_vars);
         $sInclude = $oYATS->render();
         $psContent = str_replace($arrResult[0][$key], $sInclude, $psContent);
