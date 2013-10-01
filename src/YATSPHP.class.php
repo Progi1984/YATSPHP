@@ -88,17 +88,19 @@ class YATSPHP {
   private function extractSections($psContentToExtract){
     preg_match_all('#{{section:([a-zA-Z_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
     if(!empty($arrResult[0])){
-      echo '<pre>'.print_r($arrResult, true).'</pre>';
+      #echo '<pre>'.print_r($arrResult, true).'</pre>';
 
       $arrResSectionData = $arrResult[0];
       $arrResSectionName = $arrResult[1];
       $arrResSectionParam = $arrResult[2];
       $arrResSectionAutoHide = array();
       $arrResSectionParentLoop = array();
+      $arrResSectionHidden = array();
       // Divide params
       foreach($arrResSectionParam as $key => $value){
         $arrResSectionAutoHide[$key] = 'no';
         $arrResSectionParentLoop[$key] = 'no';
+        $arrResSectionHidden[$key] = 'no';
         if(!empty($value)){
           $value = explode(' ', $value);
           foreach($value as $itmValue){
@@ -106,6 +108,8 @@ class YATSPHP {
               $arrResSectionAutoHide[$key] = substr($itmValue, 10 , strlen($itmValue) - 11);
             } elseif(substr($itmValue,0,12) == 'parentloop="'){
               $arrResSectionParentLoop[$key] = substr($itmValue, 12 , strlen($itmValue) - 13);
+            } elseif(substr($itmValue,0,8) == 'hidden="'){
+              $arrResSectionHidden[$key] = substr($itmValue, 8 , strlen($itmValue) - 9);
             }
           }
         }
@@ -118,12 +122,22 @@ class YATSPHP {
         if($piPositionStart !== false){
           $psSection = substr($psContentToExtract, $piPositionStart);
           $psSection = substr($psSection, 0, strpos($psSection, '{{/section:'.$arrResSectionName[$keySection].'}}') + strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
-          // Section : Contenu
-          $psSectionContent = substr($psSection, strlen($valSection), strlen($psSection) - strlen($valSection) - strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
-          // Section : Render
-          $this->_renderSectionAutohide = $arrResSectionAutoHide[$keySection];
-          $this->_renderSectionParentLoop = $arrResSectionParentLoop[$keySection];
-          $psSectionContent = $this->renderSection($psSectionContent);
+
+          // Section Hidden
+
+          if(// If the parameter hidden = yes && no hide asked
+            ($arrResSectionHidden[$keySection] == 'yes' &&  !isset($this->_hiddenSection[$arrResSectionName[$keySection]]))
+            // If hide is asked
+            || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)){
+            $psSectionContent = '';
+          } else {
+            // Section : Contenu
+            $psSectionContent = substr($psSection, strlen($valSection), strlen($psSection) - strlen($valSection) - strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
+            // Section : Render
+            $this->_renderSectionAutohide = $arrResSectionAutoHide[$keySection];
+            $this->_renderSectionParentLoop = $arrResSectionParentLoop[$keySection];
+            $psSectionContent = $this->renderSection($psSectionContent);
+          }
 
           $psContentToExtract = str_replace($psSection, $psSectionContent, $psContentToExtract);
         }
