@@ -4,6 +4,7 @@ class YATSPHP {
   private $_docroot;
   private $_template;
   private $_vars = array();
+  private $_hiddenSection = array();
 
   private $_renderSectionAutohide = 'no';
   private $_renderSectionParentLoop = 'no';
@@ -30,7 +31,8 @@ class YATSPHP {
   }
 
   public function hide($psSection, $pbState, $piNumRow = null){
-
+    $this->_hiddenSection[$psSection] = $pbState;
+    return true;
   }
 
   private function renderVariable($psContent, $psTagContent, $psKey, $psAttributeAlt){
@@ -86,7 +88,7 @@ class YATSPHP {
   private function extractSections($psContentToExtract){
     preg_match_all('#{{section:([a-zA-Z_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
     if(!empty($arrResult[0])){
-      #echo '<pre>'.print_r($arrResult, true).'</pre>';
+      echo '<pre>'.print_r($arrResult, true).'</pre>';
 
       $arrResSectionData = $arrResult[0];
       $arrResSectionName = $arrResult[1];
