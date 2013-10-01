@@ -9,7 +9,7 @@ class YATSPHP {
   private $_renderSectionParentLoop = 'no';
 
   public function define($psFilename, $psDocRoot = null){
-    if($psDocRoot){
+    if(is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR){
       $psDocRoot = getcwd().'/';
     }
     if(file_exists($psDocRoot.$psFilename)){
@@ -64,8 +64,23 @@ class YATSPHP {
     return $psSection;
   }
 
+  private function renderInclude($psContent){
+    preg_match_all('#{{include file="([a-zA-Z0-9/\.]*)"}}#', $psContent, $arrResult);
+    if(!empty($arrResult[0])){
+      #echo '<pre>'.print_r($arrResult, true).'</pre>';
+      foreach ($arrResult[1] as $key => $sFileInclude){
+        $oYATS = new YATSPHP();
+        $oYATS->define($sFileInclude, (is_null($this->_docroot) ? dirname($this->_template).DIRECTORY_SEPARATOR : $this->_docroot));
+        $oYATS->assign($this->_vars);
+        $sInclude = $oYATS->render();
+        $psContent = str_replace($arrResult[0][$key], $sInclude, $psContent);
+      }
+    }
+    return $psContent;
+  }
+
   private function extractSections($psContentToExtract){
-    preg_match_all('#{{section:([a-z]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
+    preg_match_all('#{{section:([a-zA-Z_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
     if(!empty($arrResult[0])){
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
 
@@ -161,23 +176,27 @@ class YATSPHP {
         $psContentToRepeat = $psContentToExtract;
         // For Each variable found
         foreach($arrResVarData as $key => $item){
-          if(is_array($this->_vars[$arrResVarName[$key]])){
-            $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]][$iInc], $psContentToRepeat);
-          } else {
-            if($arrResVarRepeatScalar[$key] == 'yes'){
-              $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]], $psContentToRepeat);
+          if(isset($this->_vars[$arrResVarName[$key]])){
+            if(is_array($this->_vars[$arrResVarName[$key]])){
+              $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]][$iInc], $psContentToRepeat);
             } else {
-              if($this->_renderSectionAutohide == 'yes'){
-                $psContent = '';
-                break 2;
+              if($arrResVarRepeatScalar[$key] == 'yes'){
+                $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]], $psContentToRepeat);
               } else {
-                if($iInc == 0){
-                  $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]], $psContentToRepeat);
+                if($this->_renderSectionAutohide == 'yes'){
+                  $psContent = '';
+                  break 2;
                 } else {
-                  $psContentToRepeat = str_replace($item, '', $psContentToRepeat);
+                  if($iInc == 0){
+                    $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]], $psContentToRepeat);
+                  } else {
+                    $psContentToRepeat = str_replace($item, '', $psContentToRepeat);
+                  }
                 }
               }
             }
+          } else {
+            $psContentToRepeat = str_replace($item, '', $psContentToRepeat);
           }
         }
         $psContent .= $psContentToRepeat;
@@ -193,6 +212,8 @@ class YATSPHP {
     $psContent = file_get_contents($this->_docroot.$this->_template);
     if($psContent){
       $psContent = $this->renderSection($psContent);
+
+      $psContent = $this->renderInclude($psContent);
       return $psContent;
     }
     return null;
