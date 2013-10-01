@@ -58,6 +58,8 @@ class YATSPHP {
   private function renderSection($psSection){
     // Section : Extract Sub
     $psSection = $this->extractSections($psSection);
+    // Section : Render translating text
+    $psSection = $this->extractL10N($psSection);
     // Section : Rendu
     $psSection = $this->extractVariables($psSection);
 
@@ -205,6 +207,23 @@ class YATSPHP {
       $psContentToExtract = $psContent;
     }
 
+    return $psContentToExtract;
+  }
+
+  /**
+   *
+   * @param string $psContentToExtract
+   * @return string
+   * @todo Manage in the str_replace the translation of the string
+   */
+  private function extractL10N($psContentToExtract){
+    preg_match_all('#{{text}}(.*?){{/text}}#', $psContentToExtract, $arrResult);
+    if(!empty($arrResult[0])){
+      #echo '<pre>'.print_r($arrResult, true).'</pre>';
+      foreach ($arrResult[1] as $key => $l10n_text){
+        $psContentToExtract = str_replace($arrResult[0][$key], $arrResult[1][$key], $psContentToExtract);
+      }
+    }
     return $psContentToExtract;
   }
 
