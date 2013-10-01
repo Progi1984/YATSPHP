@@ -59,9 +59,11 @@ class YATSPHP {
     // Section : Extract Sub
     $psSection = $this->extractSections($psSection);
     // Section : Render translating text
-    $psSection = $this->extractL10N($psSection);
+    $psSection = $this->extractL10N($psSection, false);
     // Section : Rendu
     $psSection = $this->extractVariables($psSection);
+    // Section : Render translating text
+    $psSection = $this->extractL10N($psSection, true);
 
     return $psSection;
   }
@@ -129,7 +131,7 @@ class YATSPHP {
   }
 
   private function extractVariables($psContentToExtract){
-    preg_match_all('#{{([a-z"=_]{0,50})\s{0,50}([a-z"=\s]*)}}#msi', $psContentToExtract, $arrResult);
+    preg_match_all('#{{(?!text)([a-z"=_]{0,50})\s{0,50}([a-z"=\s]*)}}#msi', $psContentToExtract, $arrResult);
 
     # echo '<pre>'.print_r($arrResult, true).'</pre>';
 
@@ -213,11 +215,16 @@ class YATSPHP {
   /**
    *
    * @param string $psContentToExtract
+   * @param boolean $bWithParse
    * @return string
    * @todo Manage in the str_replace the translation of the string
    */
-  private function extractL10N($psContentToExtract){
-    preg_match_all('#{{text}}(.*?){{/text}}#', $psContentToExtract, $arrResult);
+  private function extractL10N($psContentToExtract, $bWithParse){
+    if($bWithParse == true){
+      preg_match_all('#{{text parse="yes"}}(.*?){{/text}}#', $psContentToExtract, $arrResult);
+    } else {
+      preg_match_all('#{{text}}(.*?){{/text}}#', $psContentToExtract, $arrResult);
+    }
     if(!empty($arrResult[0])){
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
       foreach ($arrResult[1] as $key => $l10n_text){
