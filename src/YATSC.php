@@ -13,6 +13,7 @@ if(!extension_loaded('yats')){
     $oYATS->define($filename, $docroot, $searchpath);
     return $oYATS;
   }
+
   /**
    *
    * @param YATSPHP $template
