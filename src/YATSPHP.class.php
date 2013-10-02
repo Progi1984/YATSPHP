@@ -111,7 +111,7 @@ class YATSPHP {
   }
 
   private function extractSections($psContentToExtract){
-    preg_match_all('#{{section:([a-zA-Z_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
+    preg_match_all('#{{section:([a-zA-Z0-9_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
     if(!empty($arrResult[0])){
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
 
