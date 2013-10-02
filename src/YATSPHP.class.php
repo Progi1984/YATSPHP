@@ -70,7 +70,7 @@ class YATSPHP {
     return $psSection;
   }
 
-  private function renderInclude($psContent){
+  private function extractInclude($psContent){
     preg_match_all('#{{include file="([a-zA-Z0-9/\.]*)"}}#', $psContent, $arrResult);
     if(!empty($arrResult[0])){
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
@@ -248,9 +248,9 @@ class YATSPHP {
    */
   private function extractL10N($psContentToExtract, $bWithParse){
     if($bWithParse == true){
-      preg_match_all('#{{text parse="yes"}}(.*?){{/text}}#', $psContentToExtract, $arrResult);
+      preg_match_all('#{{text parse="yes"}}(.*?){{/text}}#ms', $psContentToExtract, $arrResult);
     } else {
-      preg_match_all('#{{text}}(.*?){{/text}}#', $psContentToExtract, $arrResult);
+      preg_match_all('#{{text}}(.*?){{/text}}#ms', $psContentToExtract, $arrResult);
     }
     if(!empty($arrResult[0])){
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
@@ -266,7 +266,7 @@ class YATSPHP {
     if($psContent){
       $psContent = $this->renderSection($psContent);
 
-      $psContent = $this->renderInclude($psContent);
+      $psContent = $this->extractInclude($psContent);
       return $psContent;
     }
     return null;
