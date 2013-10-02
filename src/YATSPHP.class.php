@@ -73,7 +73,7 @@ class YATSPHP {
   private function extractInclude($psContent){
     preg_match_all('#{{include file="([a-zA-Z0-9_/\.]*)"}}#', $psContent, $arrResult);
     if(!empty($arrResult[0])){
-      echo '<pre>'.print_r($arrResult, true).'</pre>';
+      #echo '<pre>'.print_r($arrResult, true).'</pre>';
       foreach ($arrResult[1] as $key => $sFileInclude){
         $oYATS = new YATSPHP();
         $sDocRoot = null;
@@ -158,7 +158,7 @@ class YATSPHP {
   }
 
   private function extractVariables($psContentToExtract){
-    preg_match_all('#{{(?!text)([a-z"=_]{0,50})\s{0,50}([a-z"=\s]*)}}#msi', $psContentToExtract, $arrResult);
+    preg_match_all('#{{(?!text)([a-z0-9"=_]{0,50})\s{0,50}([a-z"=\s]*)}}#msi', $psContentToExtract, $arrResult);
 
     # echo '<pre>'.print_r($arrResult, true).'</pre>';
 
@@ -264,6 +264,7 @@ class YATSPHP {
   public function render(){
     $psContent = file_get_contents($this->_docroot.$this->_template);
     if($psContent){
+      #echo '<pre>'.print_r($this->_vars, true).'</pre>';
       $psContent = $this->renderSection($psContent);
 
       $psContent = $this->extractInclude($psContent);
