@@ -3,20 +3,34 @@
 class YATSPHP {
   private $_docroot;
   private $_template;
+  private $_searchpath;
   private $_vars = array();
   private $_hiddenSection = array();
 
   private $_renderSectionAutohide = 'no';
   private $_renderSectionParentLoop = 'no';
 
-  public function define($psFilename, $psDocRoot = null){
+  public function define($psFilename, $psDocRoot = null, $psSearchPath = null){
     if(is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR){
       $psDocRoot = getcwd().'/';
+    }
+    if(!is_null($psSearchPath)){
+      $this->_searchpath = $psSearchPath;
+      if(substr($this->_searchpath, -1) != DIRECTORY_SEPARATOR){
+        $this->_searchpath .= DIRECTORY_SEPARATOR;
+      }
     }
     if(file_exists($psDocRoot.$psFilename)){
       $this->_docroot = $psDocRoot;
       $this->_template = $psFilename;
       return $this;
+    } else {
+      if(!is_null($this->_searchpath)){
+        if(file_exists($this->_searchpath.$psFilename)){
+          $this->_template = $this->_searchpath.$psFilename;
+          return $this;
+        }
+      }
     }
     return null;
   }
@@ -87,7 +101,7 @@ class YATSPHP {
             $sDocRoot = $this->_docroot;
           }
         }
-        $oYATS->define($sFileInclude, $sDocRoot);
+        $oYATS->define($sFileInclude, $sDocRoot, $this->_searchpath);
         $oYATS->assign($this->_vars);
         $sInclude = $oYATS->render();
         $psContent = str_replace($arrResult[0][$key], $sInclude, $psContent);
@@ -161,7 +175,6 @@ class YATSPHP {
     preg_match_all('#{{(?!text)([a-z0-9"=_]{0,50})\s{0,50}([a-z"=\s]*)}}#msi', $psContentToExtract, $arrResult);
 
     # echo '<pre>'.print_r($arrResult, true).'</pre>';
-
     $arrResVarData = $arrResult[0];
     $arrResVarName = $arrResult[1];
     $arrResVarParam = $arrResult[2];

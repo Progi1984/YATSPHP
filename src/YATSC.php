@@ -10,7 +10,7 @@ if(!extension_loaded('yats')){
    */
   function yats_define($filename, $docroot = null, $searchpath = null){
     $oYATS = new YATSPHP();
-    $oYATS->define($filename, $docroot);
+    $oYATS->define($filename, $docroot, $searchpath);
     return $oYATS;
   }
   /**
