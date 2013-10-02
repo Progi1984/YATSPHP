@@ -71,9 +71,9 @@ class YATSPHP {
   }
 
   private function extractInclude($psContent){
-    preg_match_all('#{{include file="([a-zA-Z0-9/\.]*)"}}#', $psContent, $arrResult);
+    preg_match_all('#{{include file="([a-zA-Z0-9_/\.]*)"}}#', $psContent, $arrResult);
     if(!empty($arrResult[0])){
-      #echo '<pre>'.print_r($arrResult, true).'</pre>';
+      echo '<pre>'.print_r($arrResult, true).'</pre>';
       foreach ($arrResult[1] as $key => $sFileInclude){
         $oYATS = new YATSPHP();
         $sDocRoot = null;
