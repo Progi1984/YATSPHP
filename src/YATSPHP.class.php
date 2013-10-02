@@ -6,9 +6,9 @@ class YATSPHP {
   private $_searchpath;
   private $_vars = array();
   private $_hiddenSection = array();
+  private $_levelImbrication = 0;
 
   private $_renderSectionAutohide = 'no';
-  private $_renderSectionParentLoop = 'no';
 
   public function define($psFilename, $psDocRoot = null, $psSearchPath = null){
     if(is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR){
@@ -45,7 +45,14 @@ class YATSPHP {
   }
 
   public function hide($psSection, $pbState, $piNumRow = null){
-    $this->_hiddenSection[$psSection] = $pbState;
+    if(is_null($piNumRow)){
+      $this->_hiddenSection[$psSection] = $pbState;
+    } else {
+      if(!isset($this->_hiddenSection[$psSection])){
+        $this->_hiddenSection[$psSection] = array();
+      }
+      $this->_hiddenSection[$psSection][$piNumRow] = $pbState;
+    }
     return true;
   }
 
@@ -72,6 +79,7 @@ class YATSPHP {
   }
 
   private function renderSection($psSection){
+    $this->_levelImbrication++;
     // Section : Extract Sub
     $psSection = $this->extractSections($psSection);
     // Section : Render translating text
@@ -80,7 +88,9 @@ class YATSPHP {
     $psSection = $this->extractVariables($psSection);
     // Section : Render translating text
     $psSection = $this->extractL10N($psSection, true);
-
+    // Section : Hide Sub Sections
+    $psSection = $this->extractSectionsChildren($psSection);
+    $this->_levelImbrication--;
     return $psSection;
   }
 
@@ -113,6 +123,7 @@ class YATSPHP {
   private function extractSections($psContentToExtract){
     preg_match_all('#{{section:([a-zA-Z0-9_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
     if(!empty($arrResult[0])){
+      #echo 'Niveau '.$this->_levelImbrication.'<br />';
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
 
       $arrResSectionData = $arrResult[0];
@@ -141,7 +152,9 @@ class YATSPHP {
       }
 
       foreach($arrResSectionData as $keySection => $valSection){
-        #echo 'SECTION :'.$valSection.'<br />';
+        #echo 'SECTION ('.$this->_levelImbrication.'):'.$valSection.'<br />';
+        #var_dump(isset($this->_hiddenSection[$arrResSectionName[$keySection]]) ? $this->_hiddenSection[$arrResSectionName[$keySection]] : null);
+        #echo '<br />';
         // Section
         $piPositionStart = strpos($psContentToExtract, $valSection);
         if($piPositionStart !== false){
@@ -149,19 +162,23 @@ class YATSPHP {
           $psSection = substr($psSection, 0, strpos($psSection, '{{/section:'.$arrResSectionName[$keySection].'}}') + strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
 
           // Section Hidden
-
           if(// If the parameter hidden = yes && no hide asked
             ($arrResSectionHidden[$keySection] == 'yes' &&  !isset($this->_hiddenSection[$arrResSectionName[$keySection]]))
             // If hide is asked
-            || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)){
+            || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && is_bool($this->_hiddenSection[$arrResSectionName[$keySection]]) && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)){
             $psSectionContent = '';
           } else {
             // Section : Contenu
             $psSectionContent = substr($psSection, strlen($valSection), strlen($psSection) - strlen($valSection) - strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
             // Section : Render
             $this->_renderSectionAutohide = $arrResSectionAutoHide[$keySection];
-            $this->_renderSectionParentLoop = $arrResSectionParentLoop[$keySection];
-            $psSectionContent = $this->renderSection($psSectionContent);
+            if($arrResSectionParentLoop[$keySection] == 'no'){
+              $psSectionContent = $this->renderSection($psSectionContent);
+            } else {
+              if(isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && is_array($this->_hiddenSection[$arrResSectionName[$keySection]])){
+                $psSectionContent = '{{sectionChild:'.$arrResSectionName[$keySection].'}}'.$psSectionContent.'{{/sectionChild:'.$arrResSectionName[$keySection].'}}';
+              }
+            }
           }
 
           $psContentToExtract = str_replace($psSection, $psSectionContent, $psContentToExtract);
@@ -174,7 +191,7 @@ class YATSPHP {
   private function extractVariables($psContentToExtract){
     preg_match_all('#{{(?!text)([a-z0-9"=_]{0,50})\s{0,50}([a-z"=\s]*)}}#msi', $psContentToExtract, $arrResult);
 
-    # echo '<pre>'.print_r($arrResult, true).'</pre>';
+    #echo '<pre>'.print_r($arrResult, true).'</pre>';
     $arrResVarData = $arrResult[0];
     $arrResVarName = $arrResult[1];
     $arrResVarParam = $arrResult[2];
@@ -209,8 +226,19 @@ class YATSPHP {
 
     if($bHasArray == false){
       // Render variable simple
+      $iNumNoVar = 0;
       foreach($arrResVarData as $key => $item){
+        #echo $item.'<br>';
+        if(!isset($this->_vars[$arrResVarName[$key]]) && strpos($arrResult[2][$key], 'alt=') === false){
+          $iNumNoVar++;
+        }
         $psContentToExtract = $this->renderVariable($psContentToExtract, $item, $arrResVarName[$key], $arrResult[2][$key]);
+      }
+
+      #echo $iNumNoVar.'-'.count($arrResVarData).'<br />';
+      #echo $psContentToExtract.'<br />';
+      if($iNumNoVar > 0 && $iNumNoVar == count($arrResVarData) && $this->_renderSectionAutohide == 'yes'){
+        $psContentToExtract = '';
       }
     } else {
       // Render variable with multiple arrays
@@ -240,7 +268,12 @@ class YATSPHP {
               }
             }
           } else {
-            $psContentToRepeat = str_replace($item, '', $psContentToRepeat);
+            if($this->_renderSectionAutohide == 'yes'){
+              $psContent = '';
+              break 2;
+            } else {
+              $psContentToRepeat = str_replace($item, '', $psContentToRepeat);
+            }
           }
         }
         $psContent .= $psContentToRepeat;
@@ -269,6 +302,34 @@ class YATSPHP {
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
       foreach ($arrResult[1] as $key => $l10n_text){
         $psContentToExtract = str_replace($arrResult[0][$key], $arrResult[1][$key], $psContentToExtract);
+      }
+    }
+    return $psContentToExtract;
+  }
+
+  public function extractSectionsChildren($psContentToExtract){
+    preg_match_all('#{{sectionChild:([a-zA-Z0-9_]{0,50})}}#', $psContentToExtract, $arrResult);
+    if(!empty($arrResult[0])){
+      #echo '<pre>'.print_r($arrResult, true).'</pre>';
+      foreach ($arrResult[1] as $section){
+        if(isset($this->_hiddenSection[$section]) && is_array($this->_hiddenSection[$section])){
+          $iLenSection = strlen('{{sectionChild:'.$section.'}}');
+          $iPos = strpos($psContentToExtract, '{{sectionChild:'.$section.'}}');
+          $iNumSub = 1;
+          while($iPos !== false){
+            if($iPos !== false){
+              $iPosEnd = strpos($psContentToExtract, '{{/sectionChild:'.$section.'}}', $iPos);
+              $psContentCleaned = substr($psContentToExtract, 0, $iPos - 1);
+              if(!(isset($this->_hiddenSection[$section][$iNumSub]) && $this->_hiddenSection[$section][$iNumSub] == true)){
+                $psContentCleaned .= substr($psContentToExtract, $iPos + $iLenSection, $iPosEnd - ($iPos + $iLenSection));
+              }
+              $psContentCleaned .= substr($psContentToExtract, $iPosEnd + $iLenSection + 1);
+              $psContentToExtract = $psContentCleaned;
+              $iPos = strpos($psContentToExtract, '{{sectionChild:'.$section.'}}');
+              $iNumSub++;
+            }
+          }
+        }
       }
     }
     return $psContentToExtract;
