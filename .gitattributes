@@ -1,2 +1,5 @@
-/samples export-ignore
-/src/YATSC.php export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+
+samples export-ignore
+src/YATSC.php export-ignore
