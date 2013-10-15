@@ -2,4 +2,4 @@
 .gitignore export-ignore
 
 ## Reduce the composer download size
-samples export-ignore
+samples/ export-ignore
