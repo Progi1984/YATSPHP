@@ -1,5 +1,7 @@
 <?php
 
+namespace Progi1984;
+
 class YATSPHP {
   private $_docroot;
   private $_template;

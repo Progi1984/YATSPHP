@@ -1,6 +1,6 @@
 <?php
 
-include '../src/YATSPHP.class.php';
+include '../src/Progi1984/YATSPHP.class.php';
 
 $oTPL = new YATSPHP();
 $oTPL->define('sample05.tpl');

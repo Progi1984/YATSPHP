@@ -1,6 +1,6 @@
 <?php
 
-include '../src/YATSPHP.class.php';
+include '../src/Progi1984/YATSPHP.class.php';
 
 $tmpl = yats_define("sample8.tmpl", '', getcwd());
 
