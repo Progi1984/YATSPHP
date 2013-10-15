@@ -2,7 +2,7 @@
     "name": "progi1984/yatsphp",
     "description": "Yet Another System of Template, but in PHP",
     "keywords": ["PHP","template"],
-    "version": "0.1.0-dev",
+    "version": "0.1.0-beta",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [

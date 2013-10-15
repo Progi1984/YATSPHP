@@ -1,5 +1,5 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 
+## Reduce the composer download size
 samples export-ignore
-src/YATSC.php export-ignore
