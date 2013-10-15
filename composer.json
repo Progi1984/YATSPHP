@@ -1,11 +1,16 @@
 {
     "name": "progi1984/yatsphp",
     "description": "Yet Another System of Template, but in PHP",
-    "license": "Apache License",
+    "keywords": ["PHP","template"],
+    "version": "0.1.0-dev",
+    "type": "library",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Franck LEFEVRE",
-            "email": "progi1984@gmail.com"
+            "email": "progi1984@gmail.com",
+            "homepage": "http://rootslabs.net/blog/",
+            "role": "Lead Developer"
         }
     ],
     "minimum-stability": "dev",
