@@ -1,6 +1,6 @@
 <?php
 
-namespace YATSPHP;
+namespace Progi1984;
 
 class YATSPHP {
   private $_docroot;

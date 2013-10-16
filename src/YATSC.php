@@ -1,6 +1,6 @@
 <?php
 if(!extension_loaded('yats')){
-  require 'YATSPHP.class.php';
+  require 'YATSPHP.php';
 
   /**
    * @param string $filename
