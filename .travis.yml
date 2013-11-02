@@ -22,6 +22,8 @@ before_script:
   - wget https://phar.phpunit.de/phploc.phar
   ## PHPEnv
   - phpenv rehash
+  ## test
+  - ls ./vendor/
 
 script:
   ## PHP_CodeSniffer
