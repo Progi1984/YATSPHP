@@ -46,14 +46,18 @@ class YATSPHP {
     return $this;
   }
 
-  public function hide($psSection, $pbState, $piNumRow = null){
-    if(is_null($piNumRow)){
-      $this->_hiddenSection[$psSection] = $pbState;
+  public function hide($psSection, $pbState = null, $piNumRow = null){
+    if(is_null($pbState) && is_null($piNumRow)){
+      $this->_hiddenSection = array_merge($this->_hiddenSection, $psSection);
     } else {
-      if(!isset($this->_hiddenSection[$psSection])){
-        $this->_hiddenSection[$psSection] = array();
+      if(is_null($piNumRow)){
+        $this->_hiddenSection[$psSection] = $pbState;
+      } else {
+        if(!isset($this->_hiddenSection[$psSection])){
+          $this->_hiddenSection[$psSection] = array();
+        }
+        $this->_hiddenSection[$psSection][$piNumRow] = $pbState;
       }
-      $this->_hiddenSection[$psSection][$piNumRow] = $pbState;
     }
     return true;
   }
