@@ -23,8 +23,6 @@ before_script:
   - pear install --alldeps phpmd/PHP_PMD
   ## PHPLOC
   - curl -o phploc.phar https://phar.phpunit.de/phploc.phar
- ## test
-  - ls ./vendor/
 
 script:
   ## PHP_CodeSniffer
@@ -33,7 +31,7 @@ script:
   ## PHP Copy/Paste Detector
   - php phpcpd.phar --verbose src/
   ## PHP Mess Detector
-  # - ./vendor/bin/phpmd src/ text codesize
+  - phpmd src/ text codesize
   ## PHPLOC
   - php phploc.phar --log-csv build/phploc.csv --exclude vendor src/
 
