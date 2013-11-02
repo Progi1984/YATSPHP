@@ -14,13 +14,13 @@ before_script:
   - pyrus install pear/PHP_CodeSniffer
   - phpenv rehash
   ## PHP Copy/Paste Detector
-  - wget https://phar.phpunit.de/phpcpd.phar
+  - curl -s https://phar.phpunit.de/phpcpd.phar
   ## PHP Mess Detector
   #- pear channel-discover pear.phpmd.org
   #- pear channel-discover pear.pdepend.org
   #- pear install --alldeps phpmd/PHP_PMD
   ## PHPLOC
-  - wget https://phar.phpunit.de/phploc.phar
+  - curl -s https://phar.phpunit.de/phploc.phar
  ## test
   - ls ./vendor/
 
