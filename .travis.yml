@@ -15,9 +15,9 @@ before_script:
   ## PHP Copy/Paste Detector
   - wget https://phar.phpunit.de/phpcpd.phar
   ## PHP Mess Detector
-  - pear channel-discover pear.phpmd.org
-  - pear channel-discover pear.pdepend.org
-  - pear install --alldeps phpmd/PHP_PMD
+  #- pear channel-discover pear.phpmd.org
+  #- pear channel-discover pear.pdepend.org
+  #- pear install --alldeps phpmd/PHP_PMD
   ## PHPLOC
   - wget https://phar.phpunit.de/phploc.phar
   ## PHPEnv
@@ -30,7 +30,7 @@ script:
   ## PHP Copy/Paste Detector
   - php phpcpd.phar --verbose src/
   ## PHP Mess Detector
-  - phpmd src text codesize
+  #- phpmd src text codesize
   ## PHPLOC
   - php phploc.phar --log-csv build/phploc.csv --exclude vendor src/
 
