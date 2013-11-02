@@ -5,8 +5,6 @@ php:
   - 5.5
 
 before_script:
-  ## Dossier build
-  - mkdir build
   ## Composer
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
@@ -32,7 +30,7 @@ script:
   ## PHP Copy/Paste Detector
   - php phpcpd.phar --verbose src/
   ## PHP Mess Detector
-  - phpmd src/ text codesize
+  - phpmd src/ text codesize,unusedcode,naming,design
   ## PHPLOC
   - php phploc.phar src/
 
