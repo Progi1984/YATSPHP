@@ -16,9 +16,11 @@ before_script:
   ## PHP Copy/Paste Detector
   - curl -o phpcpd.phar https://phar.phpunit.de/phpcpd.phar
   ## PHP Mess Detector
-  #- pear channel-discover pear.phpmd.org
-  #- pear channel-discover pear.pdepend.org
-  #- pear install --alldeps phpmd/PHP_PMD
+  - pear config-set preferred_state beta
+  - pecl install imagick
+  - pear channel-discover pear.phpmd.org
+  - pear channel-discover pear.pdepend.org
+  - pear install --alldeps phpmd/PHP_PMD
   ## PHPLOC
   - curl -o phploc.phar https://phar.phpunit.de/phploc.phar
  ## test
