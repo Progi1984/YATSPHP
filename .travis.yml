@@ -12,6 +12,7 @@ before_script:
   - php composer.phar install
   ## PHP_CodeSniffer
   - pyrus install pear/PHP_CodeSniffer
+  - phpenv rehash
   ## PHP Copy/Paste Detector
   - wget https://phar.phpunit.de/phpcpd.phar
   ## PHP Mess Detector
@@ -20,9 +21,7 @@ before_script:
   #- pear install --alldeps phpmd/PHP_PMD
   ## PHPLOC
   - wget https://phar.phpunit.de/phploc.phar
-  ## PHPEnv
-  - phpenv rehash
-  ## test
+ ## test
   - ls ./vendor/
 
 script:
