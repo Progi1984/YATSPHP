@@ -26,10 +26,12 @@ before_script:
   - curl -o phploc.phar https://phar.phpunit.de/phploc.phar
 
 script:
+  - phpcs -i
+  - phpcs --version
   ## PHP_CodeSniffer
+  - phpcs --standard=PSR0 src/
   - phpcs --standard=PSR1 src/
-  ## PSR2 ?
-  ## - phpcs --standard=PSR2 src/
+  - phpcs --standard=PSR2 src/
   ## PHP Copy/Paste Detector
   - php phpcpd.phar --verbose src/
   ## PHP Mess Detector
