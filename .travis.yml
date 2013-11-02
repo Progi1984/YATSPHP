@@ -11,7 +11,7 @@ before_script:
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
   ## PHPLOC
-  - wget http://pear.phpunit.de/get/phploc.phar
+  - wget https://phar.phpunit.de/phploc.phar
   ## PHPEnv
   - phpenv rehash
 
