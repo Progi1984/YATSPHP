@@ -1,7 +1,5 @@
 <?php
 if(!extension_loaded('yats')){
-  require 'YATSPHP.php';
-
   /**
    * @param string $filename
    * @param string docroot

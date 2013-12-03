@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__.'/../src/Progi1984/YATSPHP.php';
+include '../YATSPHP.phar';
 
 $paramThing = (isset($_GET['thing']) ? $_GET['thing'] : 'there');
 

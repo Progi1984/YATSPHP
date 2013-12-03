@@ -2,9 +2,13 @@
 <project name="YATSPHP" default="qa" basedir=".">
     <!-- Property -->
     <property name="builddir" value="build" />
+    <property name="author" value="Progi1984" />
+    <property name="email" value="progi1984@gmail.com" />
+    <property name="version" value="0.1" />
 
     <!-- Main targets -->
     <target name="qa" depends="qa-clean, qa-prepare, phpcs, phpcpd, phpmd, phploc, pdepend, phpdoc, phpcb" description="Do static analysis of the code"/>
+    <target name="pack" depends="pack-clean, pack_phar" description="Pack the projet for differents outputs" />
 
     <!-- QA : Clean the directory -->
     <target name="qa-clean">
@@ -89,5 +93,26 @@
     <!-- PHP Code Browser -->
     <target name="phpcb">
         <exec logoutput="true" command="phpcb --log ${builddir}/logs --source src/ --output ${builddir}/out" />
+    </target>
+    <!-- Phar : Clean -->
+    <target name="pack-clean">
+        <delete file="YATSPHP.phar" />
+    </target>
+    <!-- Phar -->
+    <target name="pack_phar">
+        <pharpackage basedir="." destfile="YATSPHP.phar" stub="phar_stub.php">
+            <fileset dir="src">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+            <metadata>
+                <element name="version" value="${version}" />
+                <element name="authors">
+                    <element name="${author}">
+                        <element name="e-mail" value="${email}" />
+                    </element>
+                </element>
+            </metadata>
+        </pharpackage>
     </target>
 </project>
