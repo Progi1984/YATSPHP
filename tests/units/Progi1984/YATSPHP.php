@@ -2,7 +2,7 @@
 
 namespace tests\units\Progi1984;
 
-require_once __DIR__ . '/../../src/Progi1984/YATSPHP.php';
+require_once __DIR__ . '/../../../src/Progi1984/YATSPHP.php';
 
 use \mageekguy\atoum;
 use Progi1984;
