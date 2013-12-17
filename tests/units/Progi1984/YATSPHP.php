@@ -11,8 +11,9 @@ class YATSPHP extends atoum\test
 {
     public function testDefine()
     {
-      $oYATS = new YATSPHP();
-      $this->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->then
+                ->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
     }
-
 }
