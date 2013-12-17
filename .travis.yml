@@ -22,6 +22,8 @@ before_script:
   - phpenv rehash
   ## PHPLOC
   - curl -o phploc.phar https://phar.phpunit.de/phploc.phar
+  ## Atoum
+  - curl -o mageekguy.atoum.phar http://downloads.atoum.org/nightly/mageekguy.atoum.phar
 
 script:
   ## PHP_CodeSniffer
@@ -33,6 +35,8 @@ script:
   - phpmd src/ text codesize,unusedcode,naming,design
   ## PHPLOC
   - php phploc.phar src/
+  ## Atoum
+  - php mageekguy.atoum.phar -d tests/
 
 notifications:
   email:
