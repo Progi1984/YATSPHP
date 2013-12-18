@@ -23,27 +23,22 @@ class YATSPHP extends atoum\test
         
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
-            ->and($oYATS->assign('key1'))
+            ->then
+                ->if($oYATS->assign('key1'))
                 ->then
-                    ->phpArray($oYATS->getvars())->isIdenticalTo(array('key1' => null))
-        ;
-        $this
-            ->if($oYATS = new Progi1984\YATSPHP())
-            ->and($oYATS->assign('key2', 'value2'))
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null))
+                ->if($oYATS->assign('key2', 'value2'))
                 ->then
-                    ->phpArray($oYATS->getvars())->isIdenticalTo(array('key2' => 'value2'))
-        ;
-        $this
-            ->if($oYATS = new Progi1984\YATSPHP())
-            ->and($oYATS->assign($arrayValue)
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value2'))
+                ->if($oYATS->assign('key2', 'value_new'))
                 ->then
-                    ->phpArray($oYATS->getvars())->isIdenticalTo($arrayValue))
-        ;
-        $this
-            ->if($oYATS = new Progi1984\YATSPHP())
-            ->and($oYATS->assign($arrayValue, 'data'))
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new'))
+                ->if($oYATS->assign(array('key3' => 'value3'))
                 ->then
-                    ->phpArray($oYATS->getvars())->isIdenticalTo($arrayValue)
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new', 'key3' => 'value3')))
+                ->if($oYATS->assign(array('key4' => 'value4'), 'data'))
+                ->then
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new', 'key3' => 'value3', 'key4' => 'value4'))
         ;
     }
 }
