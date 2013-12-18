@@ -22,7 +22,7 @@ class YATSPHP extends atoum\test
         $arrayValue = array('key' => 'value', 'key1' => 'value1');
         
         $this
-            ->if($oYATS = new YATSPHP())
+            ->if($oYATS = new Progi1984\YATSPHP())
             ->then
                 ->if($oYATS->assign('key1'))
                 ->then
