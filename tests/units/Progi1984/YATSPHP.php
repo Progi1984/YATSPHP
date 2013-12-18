@@ -16,4 +16,31 @@ class YATSPHP extends atoum\test
             ->then
                 ->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
     }
+    
+    public function testAssign()
+    {
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->and($oYATS->assign('key'))
+            ->then
+                ->array($oYATS->getvars())->isIdenticalTo(array('key' => null));
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->and($oYATS->assign('key', 'value'))
+            ->then
+                ->array($oYATS->getvars())->isIdenticalTo(array('key' => 'value'));
+        
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->and($oYATS->assign(array('key' => 'value', 'key1' => 'value1'))
+            ->then
+                ->array($oYATS->getvars())->isIdenticalTo(array('key' => 'value', 'key1' => 'value1')));
+        
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->and($oYATS->assign(array('key' => 'value', 'key1' => 'value1'), 'data'))
+            ->then
+                ->array($oYATS->getvars())->isIdenticalTo(array('key' => 'value', 'key1' => 'value1'));
+        
+    }
 }
