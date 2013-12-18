@@ -19,21 +19,23 @@ class YATSPHP extends atoum\test
     
     public function testAssign()
     {
+        $arrayValue = array('key' => 'value', 'key1' => 'value1');
+        
         $this
-            ->given($oYATS = new YATSPHP())
+            ->if($oYATS = new YATSPHP())
             ->then
-                ->if($oYATS->assign('key'))
+                ->if($oYATS->assign('key1'))
                 ->then
-                    ->array($oYATS->getvars())->isIdenticalTo(array('key' => null))
-                ->if($oYATS->assign('key', 'value'))
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null))
+                ->if($oYATS->assign('key2', 'value2'))
                 ->then
-                    ->array($oYATS->getvars())->isIdenticalTo(array('key' => 'value'))
-                ->if($oYATS->assign(array('key' => 'value', 'key1' => 'value1'))
+                    ->array($oYATS->getvars())->isIdenticalTo(array('key2' => 'value2'))
+                ->if($oYATS->assign($arrayValue)
                 ->then
-                    ->array($oYATS->getvars())->isIdenticalTo(array('key' => 'value', 'key1' => 'value1')))
-                ->if($oYATS->assign(array('key' => 'value', 'key1' => 'value1'), 'data'))
+                    ->array($oYATS->getvars())->isIdenticalTo($arrayValue))
+                ->if($oYATS->assign($arrayValue, 'data'))
                 ->then
-                    ->array($oYATS->getvars())->isIdenticalTo(array('key' => 'value', 'key1' => 'value1'))
+                    ->array($oYATS->getvars())->isIdenticalTo($arrayValue)
         ;
     }
 }
