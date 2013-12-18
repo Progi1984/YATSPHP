@@ -45,6 +45,10 @@ class YATSPHP {
     }
     return $this;
   }
+  
+  public function getvars(){
+    return $this->_vars;
+  }
 
   public function hide($psSection, $pbState = null, $piNumRow = null){
     if(is_null($pbState) && is_null($piNumRow)){
