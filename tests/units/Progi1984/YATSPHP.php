@@ -17,38 +17,49 @@ class YATSPHP extends atoum\test
                 ->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
     }
     
-    public function testAssign()
-    {
-        $oYATS = new Progi1984\YATSPHP();
+	public function testAssignWithNoData()
+	{
         $this
-            ->assert
-            ->if($oYATS->assign('key1'))
+            ->if($oYATS = new Progi1984\YATSPHP())
+			->and($oYATS->assign('key1'))
             ->then
                 ->array($oYATS->getvars())->isEqualTo(array('key1' => null));
-        
-        $oYATS = new Progi1984\YATSPHP();
+	}
+	public function testAssignWithStringData()
+	{
         $this
-            ->assert
-            ->if($oYATS->assign('key2', 'value2'))
+            ->if($oYATS = new Progi1984\YATSPHP())
+			->and($oYATS->assign('key2', 'value2'))
+            ->then
+                ->array($oYATS->getvars())->isEqualTo(array('key2' => 'value2'));
+	}
+	public function testAssignWithStringDataAndNewData()
+	{
+        $this
+            ->if($oYATS = new Progi1984\YATSPHP())
+			->and($oYATS->assign('key2', 'value2'))
             ->then
                 ->array($oYATS->getvars())->isEqualTo(array('key2' => 'value2'))
                 ->if($oYATS->assign('key2', 'value_new'))
                     ->array($oYATS->getvars())->isEqualTo(array('key2' => 'value_new'));
-
-        $oYATS = new Progi1984\YATSPHP();
+	}
+	public function testAssignWithArrayData()
+	{
+		$arrayValue = array('key3' => 'value3');
         $this
-            ->assert
-            ->if($oYATS->assign(array('key3' => 'value3')))
+            ->if($oYATS = new Progi1984\YATSPHP())
+			->and($oYATS->assign($arrayValue))
             ->then
-                ->array($oYATS->getvars())->isEqualTo(array('key3' => 'value3'));
-
-        $oYATS = new Progi1984\YATSPHP();
+                ->array($oYATS->getvars())->isEqualTo($arrayValue);
+	}
+	
+    public function testAssignWithArrayDataAndValue()
+    {
+		$arrayValue = array('key4' => 'value4');
         $this
-            ->assert
-            ->if($oYATS->assign(array('key4' => 'value4'), 'fakedata'))
+            ->if($oYATS = new Progi1984\YATSPHP())
+			->and($oYATS->assign($arrayValue, 'fakedata'))
             ->then
-                ->array($oYATS->getvars())->isEqualTo(array('key4' => 'value4'));
+                ->array($oYATS->getvars())->isEqualTo($arrayValue);
     }
 }
-
-?>
