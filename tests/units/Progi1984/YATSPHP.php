@@ -41,3 +41,5 @@ class YATSPHP extends atoum\test
                     ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new', 'key3' => 'value3', 'key4' => 'value4'));
     }
 }
+
+?>
