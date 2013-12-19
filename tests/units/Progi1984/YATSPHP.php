@@ -30,7 +30,7 @@ class YATSPHP extends atoum\test
             ->if($oYATS->assign('key2', 'value2'))
             ->then
                 ->array($oYATS->getvars())->isIdenticalTo(array('key2' => 'value2'))
-                ->if($oYATS->assign('key2', 'value2'))
+                ->if($oYATS->assign('key2', 'value_new'))
                     ->array($oYATS->getvars())->isIdenticalTo(array('key2' => 'value_new'));
 
         $oYATS = new Progi1984\YATSPHP();
