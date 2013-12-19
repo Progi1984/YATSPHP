@@ -19,23 +19,26 @@ class YATSPHP extends atoum\test
     
     public function testAssign()
     {
-        $arrayValue = array('key' => 'value', 'key1' => 'value1');
-        
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
+                ->assert
                 ->if($oYATS->assign('key1'))
                 ->then
                     ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null))
+                ->assert
                 ->if($oYATS->assign('key2', 'value2'))
                 ->then
                     ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value2'))
+                ->assert
                 ->if($oYATS->assign('key2', 'value_new'))
                 ->then
                     ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new'))
+                ->assert
                 ->if($oYATS->assign(array('key3' => 'value3')))
                 ->then
                     ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new', 'key3' => 'value3'))
+                ->assert
                 ->if($oYATS->assign(array('key4' => 'value4'), 'data'))
                 ->then
                     ->array($oYATS->getvars())->isIdenticalTo(array('key1' => null, 'key2' => 'value_new', 'key3' => 'value3', 'key4' => 'value4'));
