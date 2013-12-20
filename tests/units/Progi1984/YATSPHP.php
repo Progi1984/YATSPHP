@@ -116,7 +116,7 @@ class YATSPHP extends atoum\test
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
             	->boolean($oYATS->hide('S_Section1', true))->isTrue()
-            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => true)));
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => true));
     }
     
     public function testHideWithKeyValueBooleanAndNewValue()
@@ -126,7 +126,7 @@ class YATSPHP extends atoum\test
             ->then
             	->boolean($oYATS->hide('S_Section1', true))->isTrue()
             	->boolean($oYATS->hide('S_Section1', false))->isTrue()
-            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false)));
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false));
     }
     
     public function testHideWithRowKeyValue()
@@ -135,7 +135,7 @@ class YATSPHP extends atoum\test
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
             	->boolean($oYATS->hide('S_Section1', true, 5))->isTrue()
-            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => array(5, true))));
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => array(5, true)));
     }
     
     public function testHideWithRowKeyValueAndNewValue()
@@ -145,6 +145,6 @@ class YATSPHP extends atoum\test
             ->then
             	->boolean($oYATS->hide('S_Section1', true, 5))->isTrue()
             	->boolean($oYATS->hide('S_Section1', false))->isTrue()
-            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false)));
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false));
     }
 }
