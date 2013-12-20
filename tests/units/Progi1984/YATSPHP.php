@@ -19,7 +19,7 @@ class YATSPHP extends atoum\test
     
     public function testGetVars()
     {
-    	$this
+        $this
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
             	->array($oYATS->getVariables());
@@ -93,7 +93,7 @@ class YATSPHP extends atoum\test
     
     public function testHideWithArray()
     {
-    	$arraySection = array('S_Section1' => true, 'S_Section' => false)
+    	$arraySection = array('S_Section1' => true, 'S_Section' => false);
     	$this
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
