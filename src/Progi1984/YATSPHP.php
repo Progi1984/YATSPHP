@@ -46,8 +46,11 @@ class YATSPHP {
     return $this;
   }
   
-  public function getvars(){
+  public function getVariables(){
     return $this->_vars;
+  }
+  public function getSections(){
+    return $this->_hiddenSection;
   }
 
   public function hide($psSection, $pbState = null, $piNumRow = null){
