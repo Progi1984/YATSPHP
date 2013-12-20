@@ -17,49 +17,134 @@ class YATSPHP extends atoum\test
                 ->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
     }
     
-	public function testAssignWithNoData()
-	{
+    public function testGetVars()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->array($oYATS->getVariables());
+    }
+    
+    public function testAssignWithNoData()
+    {
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
-			->and($oYATS->assign('key1'))
+            ->and($oYATS->assign('key1'))
             ->then
-                ->array($oYATS->getvars())->isEqualTo(array('key1' => null));
-	}
-	public function testAssignWithStringData()
-	{
+                ->array($oYATS->getVariables())->isEqualTo(array('key1' => null));
+    }
+    
+    public function testAssignWithStringData()
+    {
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
-			->and($oYATS->assign('key2', 'value2'))
+            ->and($oYATS->assign('key2', 'value2'))
             ->then
-                ->array($oYATS->getvars())->isEqualTo(array('key2' => 'value2'));
-	}
-	public function testAssignWithStringDataAndNewData()
-	{
+                ->array($oYATS->getVariables())->isEqualTo(array('key2' => 'value2'));
+    }
+    
+    public function testAssignWithStringDataAndNewData()
+    {
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
-			->and($oYATS->assign('key2', 'value2'))
+            ->and($oYATS->assign('key2', 'value2'))
             ->then
-                ->array($oYATS->getvars())->isEqualTo(array('key2' => 'value2'))
+                ->array($oYATS->getVariables())->isEqualTo(array('key2' => 'value2'))
                 ->if($oYATS->assign('key2', 'value_new'))
-                    ->array($oYATS->getvars())->isEqualTo(array('key2' => 'value_new'));
-	}
-	public function testAssignWithArrayData()
-	{
-		$arrayValue = array('key3' => 'value3');
+                    ->array($oYATS->getVariables())->isEqualTo(array('key2' => 'value_new'));
+    }
+    
+    public function testAssignWithArrayData()
+    {
+        $arrayValue = array('key3' => 'value3');
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
-			->and($oYATS->assign($arrayValue))
+            ->and($oYATS->assign($arrayValue))
             ->then
-                ->array($oYATS->getvars())->isEqualTo($arrayValue);
-	}
+                ->array($oYATS->getVariables())->isEqualTo($arrayValue);
+    }
 	
     public function testAssignWithArrayDataAndValue()
     {
-		$arrayValue = array('key4' => 'value4');
+    	$arrayValue = array('key4' => 'value4');
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
-			->and($oYATS->assign($arrayValue, 'fakedata'))
+    	    ->and($oYATS->assign($arrayValue, 'fakedata'))
             ->then
-                ->array($oYATS->getvars())->isEqualTo($arrayValue);
+                ->array($oYATS->getVariables())->isEqualTo($arrayValue);
+    }
+    
+    public function testGetSections()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->array($oYATS->getSections());
+    }
+    
+    public function testHideWithString()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide('string'))->isFalse()
+            	->array($oYATS->getSections())->isEqualTo(array());
+    }
+    
+    public function testHideWithArray()
+    {
+    	$arraySection = array('S_Section1' => true, 'S_Section' => false)
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide($arraySection))->isTrue()
+            	->array($oYATS->getSections())->isEqualTo($arraySection);
+    }
+    
+    public function testHideWithKeyValueNotBoolean()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide('S_Section1', 'string'))->isFalse()
+            	->array($oYATS->getSections())->isEqualTo(array());
+    }
+    
+    public function testHideWithKeyValueBoolean()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide('S_Section1', true))->isTrue()
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => true)));
+    }
+    
+    public function testHideWithKeyValueBooleanAndNewValue()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide('S_Section1', true))->isTrue()
+            	->boolean($oYATS->hide('S_Section1', false))->isTrue()
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false)));
+    }
+    
+    public function testHideWithRowKeyValue()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide('S_Section1', true, 5))->isTrue()
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => array(5, true))));
+    }
+    
+    public function testHideWithRowKeyValueAndNewValue()
+    {
+    	$this
+            ->if($oYATS = new Progi1984\YATSPHP())
+            ->then
+            	->boolean($oYATS->hide('S_Section1', true, 5))->isTrue()
+            	->boolean($oYATS->hide('S_Section1', false))->isTrue()
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false)));
     }
 }
