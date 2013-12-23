@@ -147,4 +147,23 @@ class YATSPHP extends atoum\test
             	->boolean($oYATS->hide('S_Section1', false))->isTrue()
             	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false));
     }
+    
+    public function testRenderVariableNotDefined()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('tpl/renderVariableUndefined.tpl'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile('html/renderVariableUndefined.html');
+    }
+    
+    public function testRenderVariableDefined()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('tpl/renderVariableDefined.tpl'))
+    		->and($oYATS->assign('variable' , 'Content'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile('html/renderVariableDefined.html');
+    }
 }
