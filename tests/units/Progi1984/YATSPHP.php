@@ -14,7 +14,7 @@ class YATSPHP extends atoum\test
         $this
             ->if($oYATS = new YATSPHP())
             ->then
-                ->variable($oYATS->define('filename_not_exists.tpl'))->isNull()
+                ->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
     }
     
     public function testDefineFileExists()
@@ -22,7 +22,7 @@ class YATSPHP extends atoum\test
         $this
             ->if($oYATS = new YATSPHP())
             ->then
-                ->variable($oYATS->define('tpl/renderVariableDefined.tpl'))->isEqualTo($oYATS)
+                ->variable($oYATS->define('tpl/renderVariableDefined.tpl'))->isEqualTo($oYATS);
     }
     
     public function testGetVars()
