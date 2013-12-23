@@ -9,13 +9,20 @@ use Progi1984;
 
 class YATSPHP extends atoum\test
 {
-    public function testDefine()
+    public function testDefineFileNotExists()
     {
         $this
             ->if($oYATS = new YATSPHP())
             ->then
                 ->variable($oYATS->define('filename_not_exists.tpl'))->isNull()
-                ->variable($oYATS->render())->isNull();
+    }
+    
+    public function testDefineFileExists()
+    {
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->then
+                ->variable($oYATS->define('tpl/renderVariableDefined.tpl'))->isEqualTo($oYATS)
     }
     
     public function testGetVars()
@@ -149,22 +156,31 @@ class YATSPHP extends atoum\test
             	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => false));
     }
     
+    public function testRenderFileNotExists()
+    {
+        $this
+            ->if($oYATS = new YATSPHP())
+            ->and($oYATS->define('filename_not_exists.tpl'))
+            ->then
+                ->variable($oYATS->render())->isNull();
+    }
+    
     public function testRenderVariableNotDefined()
     {
     	$this
     		->if($oYATS = new Progi1984\YATSPHP())
-    		->and($oYATS->define('tpl'.DIRECTORY_SEPARATOR.'renderVariableUndefined.tpl'))
+    		->and($oYATS->define('renderVariableUndefined.tpl', null, 'tpl'))
     		->then
-    			->string($oYATS->render())->isEqualToContentsOfFile('html'.DIRECTORY_SEPARATOR.'renderVariableUndefined.html');
+    			->string($oYATS->render())->isEqualToContentsOfFile(getcwd().DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'renderVariableUndefined.html');
     }
     
     public function testRenderVariableDefined()
     {
     	$this
     		->if($oYATS = new Progi1984\YATSPHP())
-    		->and($oYATS->define('tpl'.DIRECTORY_SEPARATOR.'renderVariableDefined.tpl'))
+    		->and($oYATS->define('renderVariableDefined.tpl', null, 'tpl'))
     		->and($oYATS->assign('variable' , 'Content'))
     		->then
-    			->string($oYATS->render())->isEqualToContentsOfFile('html'.DIRECTORY_SEPARATOR.'renderVariableDefined.html');
+    			->string($oYATS->render())->isEqualToContentsOfFile(getcwd().DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'renderVariableDefined.html');
     }
 }
