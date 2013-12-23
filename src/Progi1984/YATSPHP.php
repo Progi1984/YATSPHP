@@ -16,7 +16,7 @@ class YATSPHP {
     if(is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR){
       $psDocRoot = getcwd().DIRECTORY_SEPARATOR;
     }
-    if(!is_null($psDocRoot)) && substr($psDocRoot, 0, -1) != DIRECTORY_SEPARATOR){
+    if(!is_null($psDocRoot) && substr($psDocRoot, 0, -1) != DIRECTORY_SEPARATOR){
       $psDocRoot .= DIRECTORY_SEPARATOR;
     }
     if(!is_null($psSearchPath)){
