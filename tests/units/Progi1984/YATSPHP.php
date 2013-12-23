@@ -22,7 +22,7 @@ class YATSPHP extends atoum\test
         $this
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
-                ->variable($oYATS->define('renderVariableDefined.tpl', getcwd().'tpl/'))->isEqualTo($oYATS);
+                ->variable($oYATS->define('renderVariableDefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl')))->isEqualTo($oYATS);
     }
     
     public function testGetVars()
