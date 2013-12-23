@@ -14,7 +14,10 @@ class YATSPHP {
 
   public function define($psFilename, $psDocRoot = null, $psSearchPath = null){
     if(is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR){
-      $psDocRoot = getcwd().'/';
+      $psDocRoot = getcwd().DIRECTORY_SEPARATOR;
+    }
+    if(!is_null($psDocRoot)) && substr($psDocRoot, 0, -1) != DIRECTORY_SEPARATOR){
+      $psDocRoot .= DIRECTORY_SEPARATOR;
     }
     if(!is_null($psSearchPath)){
       $this->_searchpath = $psSearchPath;
