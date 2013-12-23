@@ -12,7 +12,7 @@ class YATSPHP extends atoum\test
     public function testDefineFileNotExists()
     {
         $this
-            ->if($oYATS = new YATSPHP())
+            ->if($oYATS = new Progi1984\YATSPHP())
             ->then
                 ->variable($oYATS->define('filename_not_exists.tpl'))->isNull();
     }
@@ -20,7 +20,7 @@ class YATSPHP extends atoum\test
     public function testDefineFileExists()
     {
         $this
-            ->if($oYATS = new YATSPHP())
+            ->if($oYATS = new Progi1984\YATSPHP())
             ->then
                 ->variable($oYATS->define('tpl/renderVariableDefined.tpl'))->isEqualTo($oYATS);
     }
@@ -159,7 +159,7 @@ class YATSPHP extends atoum\test
     public function testRenderFileNotExists()
     {
         $this
-            ->if($oYATS = new YATSPHP())
+            ->if($oYATS = new Progi1984\YATSPHP())
             ->and($oYATS->define('filename_not_exists.tpl'))
             ->then
                 ->variable($oYATS->render())->isNull();
@@ -169,7 +169,7 @@ class YATSPHP extends atoum\test
     {
     	$this
     		->if($oYATS = new Progi1984\YATSPHP())
-    		->and($oYATS->define('renderVariableUndefined.tpl', null, 'tpl'))
+    		->and($oYATS->define('renderVariableUndefined.tpl', getcwd().DIRECTORY_SEPARATOR.'tpl'))
     		->then
     			->string($oYATS->render())->isEqualToContentsOfFile(getcwd().DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'renderVariableUndefined.html');
     }
@@ -178,7 +178,7 @@ class YATSPHP extends atoum\test
     {
     	$this
     		->if($oYATS = new Progi1984\YATSPHP())
-    		->and($oYATS->define('renderVariableDefined.tpl', null, 'tpl'))
+    		->and($oYATS->define('renderVariableDefined.tpl', getcwd().DIRECTORY_SEPARATOR.'tpl'))
     		->and($oYATS->assign('variable' , 'Content'))
     		->then
     			->string($oYATS->render())->isEqualToContentsOfFile(getcwd().DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'renderVariableDefined.html');
