@@ -1,0 +1,1 @@
+{{include file="renderVariableDefined.tpl"}}
