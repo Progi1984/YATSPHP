@@ -202,4 +202,42 @@ class YATSPHP extends atoum\test
     		->then
     			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableDefinedWithAlt.html')));
     }
+    
+    public function testRenderTextNoTranslated()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderTextNoTranslated.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderTextNoTranslated.html')));
+    }
+    
+    public function testRenderTextTranslated()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderTextTranslated.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderTextTranslated.html')));
+    }
+    
+    public function testRenderTextNoTranslatedVariable()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderTextNoTranslatedVariable.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', 'Progi1984'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderTextNoTranslatedVariable.html')));
+    }
+    
+    public function testRenderTextTranslatedVariable()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderTextTranslatedVariable.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', 'Progi1984'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderTextTranslatedVariable.html')));
+    }
 }
