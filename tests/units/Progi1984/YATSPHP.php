@@ -169,7 +169,7 @@ class YATSPHP extends atoum\test
     {
     	$this
     		->if($oYATS = new Progi1984\YATSPHP())
-    		->and($oYATS->define('renderVariableUndefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl')))
+    		->and($oYATS->define('renderVariableUndefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
     		->then
     			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableUndefined.html')));
     }
@@ -178,9 +178,28 @@ class YATSPHP extends atoum\test
     {
     	$this
     		->if($oYATS = new Progi1984\YATSPHP())
-    		->and($oYATS->define('renderVariableDefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl')))
+    		->and($oYATS->define('renderVariableDefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
     		->and($oYATS->assign('variable' , 'Content'))
     		->then
     			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableDefined.html')));
+    }
+    
+    public function testRenderVariableNotDefinedWithAlt()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderVariableUndefinedWithAlt.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableUndefinedWithAlt.html')));
+    }
+    
+    public function testRenderVariableDefinedWithAlt()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderVariableDefinedWithAlt.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable' , 'Content'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableDefinedWithAlt.html')));
     }
 }
