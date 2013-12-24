@@ -171,7 +171,7 @@ class YATSPHP extends atoum\test
     		->if($oYATS = new Progi1984\YATSPHP())
     		->and($oYATS->define('renderVariableUndefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl')))
     		->then
-    			->string($oYATS->render())->isEqualToContentsOfFile(getcwd().DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'renderVariableUndefined.html');
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableUndefined.html')));
     }
     
     public function testRenderVariableDefined()
@@ -181,6 +181,6 @@ class YATSPHP extends atoum\test
     		->and($oYATS->define('renderVariableDefined.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl')))
     		->and($oYATS->assign('variable' , 'Content'))
     		->then
-    			->string($oYATS->render())->isEqualToContentsOfFile(getcwd().DIRECTORY_SEPARATOR.'html'.DIRECTORY_SEPARATOR.'renderVariableDefined.html');
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl', 'renderVariableDefined.html')));
     }
 }
