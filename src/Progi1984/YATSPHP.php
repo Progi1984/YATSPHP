@@ -323,7 +323,7 @@ class YATSPHP {
     return $psContentToExtract;
   }
 
-  public function extractSectionsChildren($psContentToExtract){
+  private function extractSectionsChildren($psContentToExtract){
     preg_match_all('#{{sectionChild:([a-zA-Z0-9_]{0,50})}}#', $psContentToExtract, $arrResult);
     if(!empty($arrResult[0])){
       #echo '<pre>'.print_r($arrResult, true).'</pre>';
