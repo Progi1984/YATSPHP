@@ -33,7 +33,7 @@ script:
   ## PHP Copy/Paste Detector
   - php phpcpd.phar --verbose src/
   ## PHP Mess Detector
-  - phpmd src/ text codesize,unusedcode,naming,design
+  - phpmd src/ text unusedcode,naming,design
   ## PHPLOC
   - php phploc.phar src/
   ## Atoum
