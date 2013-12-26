@@ -177,9 +177,9 @@ class YATSPHP
                     foreach ($value as $itmValue) {
                         if (substr($itmValue, 0, 10) == 'autohide="') {
                             $arrResSectionAutoHide[$key] = substr($itmValue, 10, strlen($itmValue) - 11);
-                        } elseif (substr($itmValue,0,12) == 'parentloop="') {
+                        } elseif (substr($itmValue, 0, 12) == 'parentloop="') {
                             $arrResSectionParentLoop[$key] = substr($itmValue, 12, strlen($itmValue) - 13);
-                        } elseif (substr($itmValue,0,8) == 'hidden="') {
+                        } elseif (substr($itmValue, 0, 8) == 'hidden="') {
                             $arrResSectionHidden[$key] = substr($itmValue, 8, strlen($itmValue) - 9);
                         }
                     }
@@ -197,8 +197,7 @@ class YATSPHP
                     $psSection = substr($psSection, 0, strpos($psSection, '{{/section:'.$arrResSectionName[$keySection].'}}') + strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
                     
                     // Section Hidden
-                    if (
-                        // If the parameter hidden = yes && no hide asked
+                    if (// If the parameter hidden = yes && no hide asked
                         ($arrResSectionHidden[$keySection] == 'yes' &&  !isset($this->_hiddenSection[$arrResSectionName[$keySection]]))
                         // If hide is asked
                         || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && is_bool($this->_hiddenSection[$arrResSectionName[$keySection]]) && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)
@@ -241,11 +240,11 @@ class YATSPHP
             $arrResVarRepeatScalar[$keyParam] = 'no';
             if (!empty($valParam)) {
                 $valParam = explode(' ', $valParam);
-                foreach($valParam as $itmValParam){
-                    if (substr($itmValParam,0,5) == 'alt="') {
-                        $arrResVarAlt[$keyParam] = substr($itmValParam, 5 , strlen($itmValParam) - 6);
-                    } elseif (substr($itmValParam,0,14) == 'repeatscalar="') {
-                        $arrResVarRepeatScalar[$keyParam] = substr($itmValParam, 14 , strlen($itmValParam) - 15);
+                foreach ($valParam as $itmValParam) {
+                    if (substr($itmValParam, 0, 5) == 'alt="') {
+                        $arrResVarAlt[$keyParam] = substr($itmValParam, 5, strlen($itmValParam) - 6);
+                    } elseif (substr($itmValParam, 0, 14) == 'repeatscalar="') {
+                        $arrResVarRepeatScalar[$keyParam] = substr($itmValParam, 14, strlen($itmValParam) - 15);
                     }
                 }
             }
@@ -262,7 +261,7 @@ class YATSPHP
             }
         }
         
-        if($bHasArray == false){
+        if ($bHasArray == false) {
             // Render variable simple
             $iNumNoVar = 0;
             foreach ($arrResVarData as $key => $item) {
