@@ -216,8 +216,11 @@ class YATSPHP
                         if ($arrResSectionParentLoop[$keySection] == 'no') {
                             $psSectionContent = $this->renderSection($psSectionContent);
                         } else {
-                            if (isset($this->_hiddenSection[$psSectionName]) && is_array($this->_hiddenSection[$psSectionName])) {
-                                $psSectionContent = '{{sectionChild:'.$psSectionName.'}}'.$psSectionContent.'{{/sectionChild:'.$psSectionName.'}}';
+                            if (isset($this->_hiddenSection[$psSectionName])
+                                && is_array($this->_hiddenSection[$psSectionName])) {
+                                $psSectionContent = '{{sectionChild:'.$psSectionName.'}}';
+                                $psSectionContent .= $psSectionContent;
+                                $psSectionContent .= '{{/sectionChild:'.$psSectionName.'}}';
                             }
                         }
                     }
@@ -275,7 +278,7 @@ class YATSPHP
                     $iNumNoVar++;
                 }
                 $nameVar = $arrResVarName[$key];
-                $altVar = $arrResult[2][$key]; 
+                $altVar = $arrResult[2][$key];
                 $psContentToExtract = $this->renderVariable($psContentToExtract, $item, $nameVar, $altVar);
             }
             
