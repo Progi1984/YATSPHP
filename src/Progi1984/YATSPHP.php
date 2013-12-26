@@ -56,6 +56,10 @@ class YATSPHP {
     return $this->_hiddenSection;
   }
 
+  /**
+   * 
+   * @param boolean $pbState
+   */
   public function hide($psSection, $pbState = null, $piNumRow = null){
     if(is_null($pbState) && is_null($piNumRow)){
       if(!is_array($psSection)){
@@ -63,6 +67,9 @@ class YATSPHP {
       }
       $this->_hiddenSection = array_merge($this->_hiddenSection, $psSection);
     } else {
+      if(!is_bool($pbState)){
+        return false;
+      }
       if(is_null($piNumRow)){
         $this->_hiddenSection[$psSection] = $pbState;
       } else {
