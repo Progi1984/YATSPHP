@@ -240,4 +240,120 @@ class YATSPHP extends atoum\test
     		->then
     			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderTextTranslatedVariable.html')));
     }
+    
+    public function testRenderSectionWithVariable()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithVariable.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', array('content1', 'content2', 'content3', 'content4', 'content5', 'content6', 'content7', 'content8', 'content9')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithVariable.html')));
+    }
+    
+    public function testRenderSectionHidden()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionHidden.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', 'Progi1984'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionHidden.html')));
+    }
+    
+    public function testRenderSectionMaxloops()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionMaxloops.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5', 'contentA6', 'contentA7', 'contentA8', 'contentA9')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionMaxloops.html')));
+    }
+    
+    public function testRenderSectionAutohideNo()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithAutohideNo.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithAutohideNo.html')));
+    }
+    
+    public function testRenderSectionAutohideYes()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithAutohideYes.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithAutohideYes.html')));
+    }
+    
+    public function testRenderSectionSameArrays()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithSameArrays.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5', 'contentA6', 'contentA7', 'contentA8', 'contentA9')))
+    		->and($oYATS->assign('variableB', array('contentB1', 'contentB2', 'contentB3', 'contentB4', 'contentB5', 'contentB6', 'contentB7', 'contentB8', 'contentB9')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithSameArrays.html')));
+    }
+    
+    public function testRenderSectionDifferentArrays()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithDifferentArrays.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5', 'contentA6', 'contentA7', 'contentA8', 'contentA9')))
+    		->and($oYATS->assign('variableB', array('contentB1', 'contentB2', 'contentB3', 'contentB4', 'contentB5')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithDifferentArrays.html')));
+    }
+    
+    public function testRenderSectionVariableRepeatscalarYes()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithVariableRepeatscalarYes.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5', 'contentA6', 'contentA7', 'contentA8', 'contentA9')))
+    		->and($oYATS->assign('variableB', 'contentBRepeatscalarYes'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithVariableRepeatscalarYes.html')));
+    }
+    
+    public function testRenderSectionVariableRepeatscalarNo()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithVariableRepeatscalarNo.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5', 'contentA6', 'contentA7', 'contentA8', 'contentA9')))
+    		->and($oYATS->assign('variableB', 'contentBRepeatscalarNo'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithVariableRepeatscalarNo.html')));
+    }
+    
+    public function testRenderSectionSubSection()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithSubSections.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5')))
+    		->and($oYATS->assign('variableB', array('contentB1', 'contentB2', 'contentB3', 'contentB4', 'contentB5')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithSubSections.html')));
+    }
+    
+    public function testRenderSectionSubSectionParentloop()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderSectionWithSubSectionsParentloopYes.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variableA', array('contentA1', 'contentA2', 'contentA3', 'contentA4', 'contentA5')))
+    		->and($oYATS->assign('variableB', array('contentB1', 'contentB2', 'contentB3', 'contentB4', 'contentB5')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithSubSectionsParentloopYes.html')));
+    }
+    
+    
 }
