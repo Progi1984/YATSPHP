@@ -41,7 +41,7 @@ class YATSPHP {
   }
 
   public function assign($key, $value = null){
-    if(is_null($value) && is_array($key) == true){
+    if(is_array($key) == true){
       $this->_vars = array_merge($this->_vars, $key);
     } else {
       $this->_vars[$key] = $value;
