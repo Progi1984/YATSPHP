@@ -13,7 +13,8 @@ class YATSPHP
 
     private $_renderSectionAutohide = 'no';
 
-    public function define($psFilename, $psDocRoot = null, $psSearchPath = null){
+    public function define($psFilename, $psDocRoot = null, $psSearchPath = null)
+    {
         if (is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR) {
             $psDocRoot = getcwd().DIRECTORY_SEPARATOR;
         }
@@ -95,8 +96,8 @@ class YATSPHP
                 $psContentToRepeat = $psContent;
                 $psContent = '';
                 foreach($this->_vars[$psKey] as $value){
-                $psContent .= str_replace($psTagContent, $value, $psContentToRepeat);
-                }   
+                    $psContent .= str_replace($psTagContent, $value, $psContentToRepeat);
+                }
             } else {
                 $psContent = str_replace($psTagContent, $this->_vars[$psKey], $psContent);
             }
@@ -131,7 +132,7 @@ class YATSPHP
         preg_match_all('#{{include file="([a-zA-Z0-9_/\.]*)"}}#', $psContent, $arrResult);
         if (!empty($arrResult[0])) {
             #echo '<pre>'.print_r($arrResult, true).'</pre>';
-            foreach ($arrResult[1] as $key => $sFileInclude){
+            foreach ($arrResult[1] as $key => $sFileInclude) {
                 $oYATS = new YATSPHP();
                 $sDocRoot = null;
                 if (is_null($this->_docroot)) {
@@ -167,25 +168,25 @@ class YATSPHP
             $arrResSectionParentLoop = array();
             $arrResSectionHidden = array();
             // Divide params
-            foreach($arrResSectionParam as $key => $value){
+            foreach ($arrResSectionParam as $key => $value) {
                 $arrResSectionAutoHide[$key] = 'no';
                 $arrResSectionParentLoop[$key] = 'no';
                 $arrResSectionHidden[$key] = 'no';
                 if (!empty($value)) {
                     $value = explode(' ', $value);
-                    foreach($value as $itmValue){
-                        if (substr($itmValue,0,10) == 'autohide="') {
-                            $arrResSectionAutoHide[$key] = substr($itmValue, 10 , strlen($itmValue) - 11);
+                    foreach ($value as $itmValue) {
+                        if (substr($itmValue, 0, 10) == 'autohide="') {
+                            $arrResSectionAutoHide[$key] = substr($itmValue, 10, strlen($itmValue) - 11);
                         } elseif (substr($itmValue,0,12) == 'parentloop="') {
-                            $arrResSectionParentLoop[$key] = substr($itmValue, 12 , strlen($itmValue) - 13);
+                            $arrResSectionParentLoop[$key] = substr($itmValue, 12, strlen($itmValue) - 13);
                         } elseif (substr($itmValue,0,8) == 'hidden="') {
-                            $arrResSectionHidden[$key] = substr($itmValue, 8 , strlen($itmValue) - 9);
+                            $arrResSectionHidden[$key] = substr($itmValue, 8, strlen($itmValue) - 9);
                         }
                     }
                 }
             }
             
-            foreach($arrResSectionData as $keySection => $valSection){
+            foreach ($arrResSectionData as $keySection => $valSection) {
                 #echo 'SECTION ('.$this->_levelImbrication.'):'.$valSection.'<br />';
                 #var_dump(isset($this->_hiddenSection[$arrResSectionName[$keySection]]) ? $this->_hiddenSection[$arrResSectionName[$keySection]] : null);
                 #echo '<br />';
@@ -235,7 +236,7 @@ class YATSPHP
         $arrResVarAlt = array();
         $arrResVarRepeatScalar = array();
         // Divide params
-        foreach($arrResVarParam as $keyParam => $valParam){
+        foreach ($arrResVarParam as $keyParam => $valParam) {
             $arrResVarAlt[$keyParam] = '';
             $arrResVarRepeatScalar[$keyParam] = 'no';
             if (!empty($valParam)) {
@@ -253,7 +254,7 @@ class YATSPHP
         // If array in variables
         $bHasArray = false;
         $iMinimalSize = 0;
-        foreach($arrResVarData as $key => $item){
+        foreach ($arrResVarData as $key => $item) {
             if (isset($this->_vars[$arrResVarName[$key]]) && is_array($this->_vars[$arrResVarName[$key]])) {
                 $bHasArray = true;
                 $iSizeArray = count($this->_vars[$arrResVarName[$key]]);
@@ -264,7 +265,7 @@ class YATSPHP
         if($bHasArray == false){
             // Render variable simple
             $iNumNoVar = 0;
-            foreach($arrResVarData as $key => $item){
+            foreach ($arrResVarData as $key => $item) {
                 #echo $item.'<br>';
                 if (!isset($this->_vars[$arrResVarName[$key]]) && strpos($arrResult[2][$key], 'alt=') === false) {
                     $iNumNoVar++;
@@ -281,10 +282,10 @@ class YATSPHP
             // Render variable with multiple arrays
             $psContent = '';
             $iInc = 0;
-            while($iInc < $iMinimalSize) {
+            while ($iInc < $iMinimalSize) {
                 $psContentToRepeat = $psContentToExtract;
                 // For Each variable found
-                foreach($arrResVarData as $key => $item){
+                foreach ($arrResVarData as $key => $item) {
                     if (isset($this->_vars[$arrResVarName[$key]])) {
                         if (is_array($this->_vars[$arrResVarName[$key]])) {
                             $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]][$iInc], $psContentToRepeat);
@@ -350,12 +351,12 @@ class YATSPHP
         preg_match_all('#{{sectionChild:([a-zA-Z0-9_]{0,50})}}#', $psContentToExtract, $arrResult);
         if (!empty($arrResult[0])) {
             #echo '<pre>'.print_r($arrResult, true).'</pre>';
-            foreach ($arrResult[1] as $section){
-                if isset($this->_hiddenSection[$section]) && is_array($this->_hiddenSection[$section])) {
+            foreach ($arrResult[1] as $section) {
+                if (isset($this->_hiddenSection[$section]) && is_array($this->_hiddenSection[$section])) {
                     $iLenSection = strlen('{{sectionChild:'.$section.'}}');
                     $iPos = strpos($psContentToExtract, '{{sectionChild:'.$section.'}}');
                     $iNumSub = 1;
-                    while($iPos !== false){
+                    while ($iPos !== false) {
                         if ($iPos !== false) {
                             $iPosEnd = strpos($psContentToExtract, '{{/sectionChild:'.$section.'}}', $iPos);
                             $psContentCleaned = substr($psContentToExtract, 0, $iPos - 1);
