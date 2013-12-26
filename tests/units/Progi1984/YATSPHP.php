@@ -143,7 +143,7 @@ class YATSPHP extends atoum\test
             ->if($oYATS = new Progi1984\YATSPHP())
             ->then
             	->boolean($oYATS->hide('S_Section1', true, 5))->isTrue()
-            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => array(5, true)));
+            	->array($oYATS->getSections())->isEqualTo(array('S_Section1' => array(5 => true)));
     }
     
     public function testHideWithRowKeyValueAndNewValue()
