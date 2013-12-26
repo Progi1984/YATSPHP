@@ -355,14 +355,17 @@ class YATSPHP {
   }
 
   public function render(){
-    $psContent = file_get_contents($this->_docroot.$this->_template);
-    if($psContent){
-      #echo '<pre>'.print_r($this->_vars, true).'</pre>';
-      $psContent = $this->renderSection($psContent);
+    if(file_exists($this->_docroot.$this->_template)){
+      $psContent = file_get_contents($this->_docroot.$this->_template);
+      if($psContent){
+        #echo '<pre>'.print_r($this->_vars, true).'</pre>';
+        $psContent = $this->renderSection($psContent);
 
-      $psContent = $this->extractInclude($psContent);
-      return $psContent;
+        $psContent = $this->extractInclude($psContent);
+        return $psContent;
+      }
     }
+
     return null;
   }
 }
