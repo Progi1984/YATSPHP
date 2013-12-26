@@ -8,9 +8,9 @@ if (!extension_loaded('yats')) {
      */
     function yats_define($filename, $docroot = null, $searchpath = null)
     {
-      $oYATS = new YATSPHP();
-      $oYATS->define($filename, $docroot, $searchpath);
-      return $oYATS;
+        $oYATS = new YATSPHP();
+        $oYATS->define($filename, $docroot, $searchpath);
+        return $oYATS;
     }
 
     /**
@@ -22,7 +22,7 @@ if (!extension_loaded('yats')) {
      */
     function yats_assign($template, $var, $value = null)
     {
-      return $template->assign($var, $value);
+        return $template->assign($var, $value);
     }
 
     /**
@@ -34,7 +34,7 @@ if (!extension_loaded('yats')) {
      */
     function yats_getbuf($template, $locale = null, $gettext_domain = null, $gettext_dir = null)
     {
-      return $template->render();
+        return $template->render();
     }
 
     /**
@@ -46,7 +46,7 @@ if (!extension_loaded('yats')) {
      */
     function yats_hide($template, $section, $hide, $row = null)
     {
-      return $template->hide($section, $hide, $row);
+        return $template->hide($section, $hide, $row);
     }
 
     /**
@@ -55,6 +55,6 @@ if (!extension_loaded('yats')) {
      */
     function yats_getvars($template)
     {
-      //return $template
+        return $template->getVariables();
     }
 }
