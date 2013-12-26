@@ -4,14 +4,13 @@ namespace Progi1984;
 
 class YATSPHP
 {
-    private $_docroot;
-    private $_template;
-    private $_searchpath;
-    private $_vars = array();
-    private $_hiddenSection = array();
-    private $_levelImbrication = 0;
-
-    private $_renderSectionAutohide = 'no';
+    private $docroot;
+    private $template;
+    private $searchpath;
+    private $vars = array();
+    private $hiddenSection = array();
+    private $levelImbrication = 0;
+    private $renderSectionAutohide = 'no';
 
     public function define($psFilename, $psDocRoot = null, $psSearchPath = null)
     {
@@ -22,19 +21,19 @@ class YATSPHP
             $psDocRoot .= DIRECTORY_SEPARATOR;
         }
         if (!is_null($psSearchPath)) {
-            $this->_searchpath = $psSearchPath;
-            if (substr($this->_searchpath, -1) != DIRECTORY_SEPARATOR) {
-                $this->_searchpath .= DIRECTORY_SEPARATOR;
+            $this->searchpath = $psSearchPath;
+            if (substr($this->searchpath, -1) != DIRECTORY_SEPARATOR) {
+                $this->searchpath .= DIRECTORY_SEPARATOR;
             }
         }
         if (file_exists($psDocRoot.$psFilename)) {
-            $this->_docroot = $psDocRoot;
-            $this->_template = $psFilename;
+            $this->docroot = $psDocRoot;
+            $this->template = $psFilename;
             return $this;
         } else {
-            if (!is_null($this->_searchpath)) {
-                if (file_exists($this->_searchpath.$psFilename)) {
-                    $this->_template = $this->_searchpath.$psFilename;
+            if (!is_null($this->searchpath)) {
+                if (file_exists($this->searchpath.$psFilename)) {
+                    $this->template = $this->searchpath.$psFilename;
                     return $this;
                 }
             }
@@ -45,21 +44,21 @@ class YATSPHP
     public function assign($key, $value = null)
     {
         if (is_array($key) == true) {
-            $this->_vars = array_merge($this->_vars, $key);
+            $this->vars = array_merge($this->vars, $key);
         } else {
-            $this->_vars[$key] = $value;
+            $this->vars[$key] = $value;
         }
         return $this;
     }
   
     public function getVariables()
     {
-        return $this->_vars;
+        return $this->vars;
     }
     
     public function getSections()
     {
-        return $this->_hiddenSection;
+        return $this->hiddenSection;
     }
 
     /**
@@ -72,18 +71,18 @@ class YATSPHP
             if (!is_array($psSection)) {
                 return false;
             }
-            $this->_hiddenSection = array_merge($this->_hiddenSection, $psSection);
+            $this->hiddenSection = array_merge($this->hiddenSection, $psSection);
         } else {
             if (!is_bool($pbState)) {
                 return false;
             }
             if (is_null($piNumRow)) {
-                $this->_hiddenSection[$psSection] = $pbState;
+                $this->hiddenSection[$psSection] = $pbState;
             } else {
-                if (!isset($this->_hiddenSection[$psSection])) {
-                    $this->_hiddenSection[$psSection] = array();
+                if (!isset($this->hiddenSection[$psSection])) {
+                    $this->hiddenSection[$psSection] = array();
                 }
-                $this->_hiddenSection[$psSection][$piNumRow] = $pbState;
+                $this->hiddenSection[$psSection][$piNumRow] = $pbState;
             }
         }
         return true;
@@ -91,15 +90,15 @@ class YATSPHP
 
     private function renderVariable($psContent, $psTagContent, $psKey, $psAttributeAlt)
     {
-        if (isset($this->_vars[$psKey])) {
-            if (is_array($this->_vars[$psKey])) {
+        if (isset($this->vars[$psKey])) {
+            if (is_array($this->vars[$psKey])) {
                 $psContentToRepeat = $psContent;
                 $psContent = '';
-                foreach ($this->_vars[$psKey] as $value) {
+                foreach ($this->vars[$psKey] as $value) {
                     $psContent .= str_replace($psTagContent, $value, $psContentToRepeat);
                 }
             } else {
-                $psContent = str_replace($psTagContent, $this->_vars[$psKey], $psContent);
+                $psContent = str_replace($psTagContent, $this->vars[$psKey], $psContent);
             }
         } else {
             if (strpos($psAttributeAlt, 'alt=') !== false) {
@@ -112,7 +111,7 @@ class YATSPHP
 
     private function renderSection($psSection)
     {
-        $this->_levelImbrication++;
+        $this->levelImbrication++;
         // Section : Extract Sub
         $psSection = $this->extractSections($psSection);
         // Section : Render translating text
@@ -123,7 +122,7 @@ class YATSPHP
         $psSection = $this->extractL10N($psSection, true);
         // Section : Hide Sub Sections
         $psSection = $this->extractSectionsChildren($psSection);
-        $this->_levelImbrication--;
+        $this->levelImbrication--;
         return $psSection;
     }
 
@@ -135,18 +134,18 @@ class YATSPHP
             foreach ($arrResult[1] as $key => $sFileInclude) {
                 $oYATS = new YATSPHP();
                 $sDocRoot = null;
-                if (is_null($this->_docroot)) {
-                    $sDocRoot = dirname($this->_template).DIRECTORY_SEPARATOR;
+                if (is_null($this->docroot)) {
+                    $sDocRoot = dirname($this->template).DIRECTORY_SEPARATOR;
                 } else {
                     if (substr($sFileInclude, 0, 2) == './') {
-                        $sDocRoot = dirname($this->_template).DIRECTORY_SEPARATOR;
+                        $sDocRoot = dirname($this->template).DIRECTORY_SEPARATOR;
                         $sFileInclude = substr($sFileInclude, 2);
                     } else {
-                        $sDocRoot = $this->_docroot;
+                        $sDocRoot = $this->docroot;
                     }
                 }
-                $oYATS->define($sFileInclude, $sDocRoot, $this->_searchpath);
-                $oYATS->assign($this->_vars);
+                $oYATS->define($sFileInclude, $sDocRoot, $this->searchpath);
+                $oYATS->assign($this->vars);
                 $sInclude = $oYATS->render();
                 $psContent = str_replace($arrResult[0][$key], $sInclude, $psContent);
             }
@@ -158,7 +157,7 @@ class YATSPHP
     {
         preg_match_all('#{{section:([a-zA-Z0-9_]{0,50})\s{0,50}([a-z"=\s]*)}}#', $psContentToExtract, $arrResult);
         if (!empty($arrResult[0])) {
-            #echo 'Niveau '.$this->_levelImbrication.'<br />';
+            #echo 'Niveau '.$this->levelImbrication.'<br />';
             #echo '<pre>'.print_r($arrResult, true).'</pre>';
             
             $arrResSectionData = $arrResult[0];
@@ -187,7 +186,7 @@ class YATSPHP
             }
             
             foreach ($arrResSectionData as $keySection => $valSection) {
-                #echo 'SECTION ('.$this->_levelImbrication.'):'.$valSection.'<br />';
+                #echo 'SECTION ('.$this->levelImbrication.'):'.$valSection.'<br />';
                 #echo '<br />';
                 // Section
                 $piPositionStart = strpos($psContentToExtract, $valSection);
@@ -200,11 +199,11 @@ class YATSPHP
                     // Section Hidden
                     if (// If the parameter hidden = yes && no hide asked
                         ($arrResSectionHidden[$keySection] == 'yes'
-                            && !isset($this->_hiddenSection[$psSectionName]))
+                            && !isset($this->hiddenSection[$psSectionName]))
                         // If hide is asked
-                        || (isset($this->_hiddenSection[$psSectionName])
-                            && is_bool($this->_hiddenSection[$psSectionName])
-                            && $this->_hiddenSection[$psSectionName] == true)
+                        || (isset($this->hiddenSection[$psSectionName])
+                            && is_bool($this->hiddenSection[$psSectionName])
+                            && $this->hiddenSection[$psSectionName] == true)
                     ) {
                         $psSectionContent = '';
                     } else {
@@ -212,12 +211,12 @@ class YATSPHP
                         $iLength = strlen($psSection) - strlen($valSection) - strlen($psTagSectionEnd);
                         $psSectionContent = substr($psSection, strlen($valSection), $iLength);
                         // Section : Render
-                        $this->_renderSectionAutohide = $arrResSectionAutoHide[$keySection];
+                        $this->renderSectionAutohide = $arrResSectionAutoHide[$keySection];
                         if ($arrResSectionParentLoop[$keySection] == 'no') {
                             $psSectionContent = $this->renderSection($psSectionContent);
                         } else {
-                            if (isset($this->_hiddenSection[$psSectionName])
-                                && is_array($this->_hiddenSection[$psSectionName])) {
+                            if (isset($this->hiddenSection[$psSectionName])
+                                && is_array($this->hiddenSection[$psSectionName])) {
                                 $psSectionContent = '{{sectionChild:'.$psSectionName.'}}';
                                 $psSectionContent .= $psSectionContent;
                                 $psSectionContent .= '{{/sectionChild:'.$psSectionName.'}}';
@@ -262,9 +261,9 @@ class YATSPHP
         $bHasArray = false;
         $iMinSize = 0;
         foreach ($arrResVarData as $key => $item) {
-            if (isset($this->_vars[$arrResVarName[$key]]) && is_array($this->_vars[$arrResVarName[$key]])) {
+            if (isset($this->vars[$arrResVarName[$key]]) && is_array($this->vars[$arrResVarName[$key]])) {
                 $bHasArray = true;
-                $iSizeArray = count($this->_vars[$arrResVarName[$key]]);
+                $iSizeArray = count($this->vars[$arrResVarName[$key]]);
                 $iMinimalSize = ($iMinSize == 0 ? $iSizeArray : ($iSizeArray < $iMinSize ? $iSizeArray : $iMinSize));
             }
         }
@@ -274,7 +273,7 @@ class YATSPHP
             $iNumNoVar = 0;
             foreach ($arrResVarData as $key => $item) {
                 #echo $item.'<br>';
-                if (!isset($this->_vars[$arrResVarName[$key]]) && strpos($arrResult[2][$key], 'alt=') === false) {
+                if (!isset($this->vars[$arrResVarName[$key]]) && strpos($arrResult[2][$key], 'alt=') === false) {
                     $iNumNoVar++;
                 }
                 $nameVar = $arrResVarName[$key];
@@ -284,7 +283,7 @@ class YATSPHP
             
             #echo $iNumNoVar.'-'.count($arrResVarData).'<br />';
             #echo $psContentToExtract.'<br />';
-            if ($iNumNoVar > 0 && $iNumNoVar == count($arrResVarData) && $this->_renderSectionAutohide == 'yes') {
+            if ($iNumNoVar > 0 && $iNumNoVar == count($arrResVarData) && $this->renderSectionAutohide == 'yes') {
                 $psContentToExtract = '';
             }
         } else {
@@ -295,7 +294,7 @@ class YATSPHP
                 $psContentToRepeat = $psContentToExtract;
                 // For Each variable found
                 foreach ($arrResVarData as $key => $item) {
-                    $valVar = $this->_vars[$arrResVarName[$key]];
+                    $valVar = $this->vars[$arrResVarName[$key]];
                     if (isset($valVar)) {
                         if (is_array($valVar)) {
                             $psContentToRepeat = str_replace($item, $valVar[$iInc], $psContentToRepeat);
@@ -303,7 +302,7 @@ class YATSPHP
                             if ($arrResVarRepeatScalar[$key] == 'yes') {
                                 $psContentToRepeat = str_replace($item, $valVar, $psContentToRepeat);
                             } else {
-                                if ($this->_renderSectionAutohide == 'yes') {
+                                if ($this->renderSectionAutohide == 'yes') {
                                     $psContent = '';
                                     break 2;
                                 } else {
@@ -316,7 +315,7 @@ class YATSPHP
                             }
                         }
                     } else {
-                        if ($this->_renderSectionAutohide == 'yes') {
+                        if ($this->renderSectionAutohide == 'yes') {
                             $psContent = '';
                             break 2;
                         } else {
@@ -362,10 +361,10 @@ class YATSPHP
         if (!empty($arrResult[0])) {
             #echo '<pre>'.print_r($arrResult, true).'</pre>';
             foreach ($arrResult[1] as $section) {
-                if (isset($this->_hiddenSection[$section]) && is_array($this->_hiddenSection[$section])) {
+                if (isset($this->hiddenSection[$section]) && is_array($this->hiddenSection[$section])) {
                     $iLenSection = strlen('{{sectionChild:'.$section.'}}');
                     $iPos = strpos($psContentToExtract, '{{sectionChild:'.$section.'}}');
-                    $itmSection = $this->_hiddenSection[$section];
+                    $itmSection = $this->hiddenSection[$section];
                     $iNumSub = 1;
                     while ($iPos !== false) {
                         if ($iPos !== false) {
@@ -389,10 +388,10 @@ class YATSPHP
 
     public function render()
     {
-        if (file_exists($this->_docroot.$this->_template)) {
-            $psContent = file_get_contents($this->_docroot.$this->_template);
+        if (file_exists($this->docroot.$this->template)) {
+            $psContent = file_get_contents($this->docroot.$this->template);
             if ($psContent) {
-                #echo '<pre>'.print_r($this->_vars, true).'</pre>';
+                #echo '<pre>'.print_r($this->vars, true).'</pre>';
                 $psContent = $this->renderSection($psContent);
                 
                 $psContent = $this->extractInclude($psContent);
