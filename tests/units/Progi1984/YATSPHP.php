@@ -355,5 +355,35 @@ class YATSPHP extends atoum\test
     			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderSectionWithSubSectionsParentloopYes.html')));
     }
     
+    public function testRenderInclude()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderInclude.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', 'ContentIncluded'))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderInclude.html')));
+    }
+    
+    public function testRenderIncludeInSection()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderIncludeInSection.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', array('ContentIncluded1', 'ContentIncluded2', 'ContentIncluded3', 'ContentIncluded4', 'ContentIncluded5')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderIncludeInSection.html')));
+    }
+    
+    public function testRenderIncludeInSectionHidden()
+    {
+    	$this
+    		->if($oYATS = new Progi1984\YATSPHP())
+    		->and($oYATS->define('renderIncludeInSectionHidden.tpl', join(DIRECTORY_SEPARATOR, array(__DIR__, 'tpl'))))
+    		->and($oYATS->assign('variable', array('ContentIncluded1', 'ContentIncluded2', 'ContentIncluded3', 'ContentIncluded4', 'ContentIncluded5')))
+    		->then
+    			->string($oYATS->render())->isEqualToContentsOfFile(join(DIRECTORY_SEPARATOR, array(__DIR__, 'html', 'renderIncludeInSectionHidden.html')));
+    }
+    
     
 }
