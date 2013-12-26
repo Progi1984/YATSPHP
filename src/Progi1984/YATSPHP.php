@@ -193,29 +193,31 @@ class YATSPHP
                 $piPositionStart = strpos($psContentToExtract, $valSection);
                 if ($piPositionStart !== false) {
                     $psSection = substr($psContentToExtract, $piPositionStart);
-                    $psTagSectionClose = '{{/section:'.$arrResSectionName[$keySection].'}}';
-                    $psSection = substr($psSection, 0, strpos($psSection, $psTagSectionClose) + strlen($psTagSectionClose));
-                    
+                    $psSectionName = $arrResSectionName[$keySection];
+                    $psTagSectionEnd = '{{/section:'.$psSectionName.'}}';
+                    $psSection = substr($psSection, 0, strpos($psSection, $psTagSectionEnd) + strlen($psTagSectionEnd));
+
                     // Section Hidden
                     if (// If the parameter hidden = yes && no hide asked
-                        ($arrResSectionHidden[$keySection] == 'yes' 
-                            && !isset($this->_hiddenSection[$arrResSectionName[$keySection]]))
+                        ($arrResSectionHidden[$keySection] == 'yes'
+                            && !isset($this->_hiddenSection[$psSectionName]))
                         // If hide is asked
-                        || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) 
-                            && is_bool($this->_hiddenSection[$arrResSectionName[$keySection]]) 
-                            && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)
+                        || (isset($this->_hiddenSection[$psSectionName])
+                            && is_bool($this->_hiddenSection[$psSectionName])
+                            && $this->_hiddenSection[$psSectionName] == true)
                     ) {
                         $psSectionContent = '';
                     } else {
                         // Section : Contenu
-                        $psSectionContent = substr($psSection, strlen($valSection), strlen($psSection) - strlen($valSection) - strlen($psTagSectionClose));
+                        $iLength = strlen($psSection) - strlen($valSection) - strlen($psTagSectionEnd);
+                        $psSectionContent = substr($psSection, strlen($valSection), $iLength);
                         // Section : Render
                         $this->_renderSectionAutohide = $arrResSectionAutoHide[$keySection];
                         if ($arrResSectionParentLoop[$keySection] == 'no') {
                             $psSectionContent = $this->renderSection($psSectionContent);
                         } else {
-                            if (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && is_array($this->_hiddenSection[$arrResSectionName[$keySection]])) {
-                                $psSectionContent = '{{sectionChild:'.$arrResSectionName[$keySection].'}}'.$psSectionContent.'{{/sectionChild:'.$arrResSectionName[$keySection].'}}';
+                            if (isset($this->_hiddenSection[$psSectionName]) && is_array($this->_hiddenSection[$psSectionName])) {
+                                $psSectionContent = '{{sectionChild:'.$psSectionName.'}}'.$psSectionContent.'{{/sectionChild:'.$psSectionName.'}}';
                             }
                         }
                     }
@@ -255,12 +257,12 @@ class YATSPHP
         
         // If array in variables
         $bHasArray = false;
-        $iMinimalSize = 0;
+        $iMinSize = 0;
         foreach ($arrResVarData as $key => $item) {
             if (isset($this->_vars[$arrResVarName[$key]]) && is_array($this->_vars[$arrResVarName[$key]])) {
                 $bHasArray = true;
                 $iSizeArray = count($this->_vars[$arrResVarName[$key]]);
-                $iMinimalSize = ($iMinimalSize == 0 ? $iSizeArray : ($iSizeArray < $iMinimalSize ? $iSizeArray : $iMinimalSize));
+                $iMinimalSize = ($iMinSize == 0 ? $iSizeArray : ($iSizeArray < $iMinSize ? $iSizeArray : $iMinSize));
             }
         }
         
@@ -272,7 +274,9 @@ class YATSPHP
                 if (!isset($this->_vars[$arrResVarName[$key]]) && strpos($arrResult[2][$key], 'alt=') === false) {
                     $iNumNoVar++;
                 }
-                $psContentToExtract = $this->renderVariable($psContentToExtract, $item, $arrResVarName[$key], $arrResult[2][$key]);
+                $nameVar = $arrResVarName[$key];
+                $altVar = $arrResult[2][$key]; 
+                $psContentToExtract = $this->renderVariable($psContentToExtract, $item, $nameVar, $altVar);
             }
             
             #echo $iNumNoVar.'-'.count($arrResVarData).'<br />';
@@ -288,19 +292,20 @@ class YATSPHP
                 $psContentToRepeat = $psContentToExtract;
                 // For Each variable found
                 foreach ($arrResVarData as $key => $item) {
-                    if (isset($this->_vars[$arrResVarName[$key]])) {
-                        if (is_array($this->_vars[$arrResVarName[$key]])) {
-                            $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]][$iInc], $psContentToRepeat);
+                    $valVar = $this->_vars[$arrResVarName[$key]];
+                    if (isset($valVar)) {
+                        if (is_array($valVar)) {
+                            $psContentToRepeat = str_replace($item, $valVar[$iInc], $psContentToRepeat);
                         } else {
                             if ($arrResVarRepeatScalar[$key] == 'yes') {
-                                $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]], $psContentToRepeat);
+                                $psContentToRepeat = str_replace($item, $valVar, $psContentToRepeat);
                             } else {
                                 if ($this->_renderSectionAutohide == 'yes') {
                                     $psContent = '';
                                     break 2;
                                 } else {
                                     if ($iInc == 0) {
-                                        $psContentToRepeat = str_replace($item, $this->_vars[$arrResVarName[$key]], $psContentToRepeat);
+                                        $psContentToRepeat = str_replace($item, $valVar, $psContentToRepeat);
                                     } else {
                                         $psContentToRepeat = str_replace($item, '', $psContentToRepeat);
                                     }
@@ -357,13 +362,15 @@ class YATSPHP
                 if (isset($this->_hiddenSection[$section]) && is_array($this->_hiddenSection[$section])) {
                     $iLenSection = strlen('{{sectionChild:'.$section.'}}');
                     $iPos = strpos($psContentToExtract, '{{sectionChild:'.$section.'}}');
+                    $itmSection = $this->_hiddenSection[$section];
                     $iNumSub = 1;
                     while ($iPos !== false) {
                         if ($iPos !== false) {
                             $iPosEnd = strpos($psContentToExtract, '{{/sectionChild:'.$section.'}}', $iPos);
                             $psContentCleaned = substr($psContentToExtract, 0, $iPos - 1);
-                            if (!(isset($this->_hiddenSection[$section][$iNumSub]) && $this->_hiddenSection[$section][$iNumSub] == true)) {
-                                $psContentCleaned .= substr($psContentToExtract, $iPos + $iLenSection, $iPosEnd - ($iPos + $iLenSection));
+                            if (!(isset($itmSection[$iNumSub]) && $itmSection[$iNumSub] == true)) {
+                                $iStart = $iPos + $iLenSection;
+                                $psContentCleaned .= substr($psContentToExtract, $iStart, $iPosEnd - $iStart);
                             }
                             $psContentCleaned .= substr($psContentToExtract, $iPosEnd + $iLenSection + 1);
                             $psContentToExtract = $psContentCleaned;
