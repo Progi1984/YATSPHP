@@ -94,9 +94,7 @@ class YATSPHP {
         $psContent = str_replace($psTagContent, $this->_vars[$psKey], $psContent);
       }
     } else {
-      if(strpos($psAttributeAlt, 'alt=') === false){
-        $psContent = str_replace($psTagContent, '', $psContent);
-      } else {
+      if(strpos($psAttributeAlt, 'alt=') !== false){
         preg_match('#alt="([a-z]{0,100})"#', $psAttributeAlt, $arrResultAlt);
         $psContent = str_replace($psTagContent, $arrResultAlt[1], $psContent);
       }
