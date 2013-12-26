@@ -95,7 +95,7 @@ class YATSPHP
             if (is_array($this->_vars[$psKey])) {
                 $psContentToRepeat = $psContent;
                 $psContent = '';
-                foreach($this->_vars[$psKey] as $value){
+                foreach ($this->_vars[$psKey] as $value) {
                     $psContent .= str_replace($psTagContent, $value, $psContentToRepeat);
                 }
             } else {
@@ -188,24 +188,27 @@ class YATSPHP
             
             foreach ($arrResSectionData as $keySection => $valSection) {
                 #echo 'SECTION ('.$this->_levelImbrication.'):'.$valSection.'<br />';
-                #var_dump(isset($this->_hiddenSection[$arrResSectionName[$keySection]]) ? $this->_hiddenSection[$arrResSectionName[$keySection]] : null);
                 #echo '<br />';
                 // Section
                 $piPositionStart = strpos($psContentToExtract, $valSection);
                 if ($piPositionStart !== false) {
                     $psSection = substr($psContentToExtract, $piPositionStart);
-                    $psSection = substr($psSection, 0, strpos($psSection, '{{/section:'.$arrResSectionName[$keySection].'}}') + strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
+                    $psTagSectionClose = '{{/section:'.$arrResSectionName[$keySection].'}}';
+                    $psSection = substr($psSection, 0, strpos($psSection, $psTagSectionClose) + strlen($psTagSectionClose));
                     
                     // Section Hidden
                     if (// If the parameter hidden = yes && no hide asked
-                        ($arrResSectionHidden[$keySection] == 'yes' &&  !isset($this->_hiddenSection[$arrResSectionName[$keySection]]))
+                        ($arrResSectionHidden[$keySection] == 'yes' 
+                            && !isset($this->_hiddenSection[$arrResSectionName[$keySection]]))
                         // If hide is asked
-                        || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) && is_bool($this->_hiddenSection[$arrResSectionName[$keySection]]) && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)
+                        || (isset($this->_hiddenSection[$arrResSectionName[$keySection]]) 
+                            && is_bool($this->_hiddenSection[$arrResSectionName[$keySection]]) 
+                            && $this->_hiddenSection[$arrResSectionName[$keySection]] == true)
                     ) {
                         $psSectionContent = '';
                     } else {
                         // Section : Contenu
-                        $psSectionContent = substr($psSection, strlen($valSection), strlen($psSection) - strlen($valSection) - strlen('{{/section:'.$arrResSectionName[$keySection].'}}'));
+                        $psSectionContent = substr($psSection, strlen($valSection), strlen($psSection) - strlen($valSection) - strlen($psTagSectionClose));
                         // Section : Render
                         $this->_renderSectionAutohide = $arrResSectionAutoHide[$keySection];
                         if ($arrResSectionParentLoop[$keySection] == 'no') {
