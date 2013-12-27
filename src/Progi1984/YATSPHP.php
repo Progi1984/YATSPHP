@@ -390,7 +390,7 @@ class YATSPHP
             putenv('LC_ALL='.$locale);
             setlocale(LC_ALL, $locale);
             bindtextdomain($gettext_domain, $gettext_dir);
-            textdomain($gettext_domain); 
+            textdomain($gettext_domain);
         }
         
         if (file_exists($this->docroot.$this->template)) {
