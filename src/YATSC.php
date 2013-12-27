@@ -34,7 +34,7 @@ if (!extension_loaded('yats')) {
      */
     function yats_getbuf($template, $locale = null, $gettext_domain = null, $gettext_dir = null)
     {
-        return $template->render();
+        return $template->render($locale, $gettext_domain, $gettext_dir);
     }
 
     /**
