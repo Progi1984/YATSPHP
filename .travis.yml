@@ -24,6 +24,7 @@ before_script:
   ## PHPLOC
   - curl -o phploc.phar https://phar.phpunit.de/phploc.phar
   ## Atoum
+  - mkdir -p build/logs
   - curl -o mageekguy.atoum.phar http://downloads.atoum.org/nightly/mageekguy.atoum.phar
 
 script:
@@ -37,7 +38,11 @@ script:
   ## PHPLOC
   - php phploc.phar src/
   ## Atoum
-  - php mageekguy.atoum.phar -d tests/
+  - php mageekguy.atoum.phar -d tests/ -c .atoum.php
+
+after_script:
+ ## Coveralls
+ - php vendor/bin/coveralls -v
 
 notifications:
   email:
