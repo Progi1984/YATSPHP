@@ -1,1 +1,0 @@
-<b>{{variable}}</b>
