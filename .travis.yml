@@ -4,11 +4,14 @@ php:
   - 5.3.3
   - 5.4
   - 5.5
+env:
+  global:
+  - secure: "TR0pFe8GQjT9cAgXorxAUGGyf7oRamNR2i/3p6sovN/p/PqvzUBHKUzqfxEUEYYOS0sRlgKraM9IGotMbGrGKU8W/az30mjGca6ByKUcqPhIa3QSx48unZK7Ofcu4nosuBBO4zNUPOM9FubgikLXydGyKzO5AS2rHs9YXpTrW7w="
 
 before_script:
   ## Composer
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install
+  - composer selfupdate --quiet
+  - composer install -n --prefer-source --dev
   ## PHP_CodeSniffer
   - pyrus install pear/PHP_CodeSniffer
   - phpenv rehash
@@ -26,6 +29,9 @@ before_script:
   ## Atoum
   - mkdir -p build/logs
   - curl -o mageekguy.atoum.phar http://downloads.atoum.org/nightly/mageekguy.atoum.phar
+  ## PHPDocumentor
+  - mkdir -p build/docs
+  - composer update -n --prefer-source --dev
 
 script:
   ## PHP_CodeSniffer
@@ -39,10 +45,14 @@ script:
   - php phploc.phar src/
   ## Atoum
   - php mageekguy.atoum.phar -d tests/ -c .atoum.php
+  ## PHPDocumentor
+  - phpdoc -d ./src -t ./build/docs
 
 after_script:
  ## Coveralls
  - php vendor/bin/coveralls -v
+ ## PHPDocumentor
+ - ./.travis_shell_after_success.sh
 
 notifications:
   email:
