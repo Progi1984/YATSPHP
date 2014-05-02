@@ -26,7 +26,7 @@ if [ "$TRAVIS_REPO_SLUG" == "Progi1984/YATSPHP" ] && [ "$TRAVIS_PULL_REQUEST" ==
   mkdir $TRAVIS_BRANCH
 
   echo "--DEBUG : Copie"
-  cp -Rf $HOME/docs-latest/ ./$TRAVIS_BRANCH/
+  cp -Rf $HOME/docs-latest/* ./$TRAVIS_BRANCH/
 
   echo "--DEBUG : Git"
   git add -f .
