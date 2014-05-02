@@ -47,7 +47,7 @@ script:
   ## Atoum
   - php mageekguy.atoum.phar -d tests/ -c .atoum.php
   ## PHPDocumentor
-  - php vendor/bin/phpdoc -d ./src -t ./build/docs
+  - vendor/bin/phpdoc.php -d ./src -t ./build/docs
 
 after_script:
  ## Coveralls
