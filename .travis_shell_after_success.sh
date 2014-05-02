@@ -20,6 +20,7 @@ if [ "$TRAVIS_REPO_SLUG" == "Progi1984/YATSPHP" ] && [ "$TRAVIS_PULL_REQUEST" ==
   mkdir docs
   cd docs
   git rm -rf ./$TRAVIS_BRANCH
+  mkdir $TRAVIS_BRANCH
   cp -Rf $HOME/docs-latest ./$TRAVIS_BRANCH
   git add -f .
   git commit -m "PHPDocumentor (Travis Build : $TRAVIS_BUILD_NUMBER  - Branch : $TRAVIS_BRANCH)"
