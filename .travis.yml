@@ -4,6 +4,7 @@ php:
   - 5.3.3
   - 5.4
   - 5.5
+  - 5.6
 env:
   global:
   - secure: "TR0pFe8GQjT9cAgXorxAUGGyf7oRamNR2i/3p6sovN/p/PqvzUBHKUzqfxEUEYYOS0sRlgKraM9IGotMbGrGKU8W/az30mjGca6ByKUcqPhIa3QSx48unZK7Ofcu4nosuBBO4zNUPOM9FubgikLXydGyKzO5AS2rHs9YXpTrW7w="
@@ -46,7 +47,7 @@ script:
   ## Atoum
   - php mageekguy.atoum.phar -d tests/ -c .atoum.php
   ## PHPDocumentor
-  - phpdoc -d ./src -t ./build/docs
+  - php vendor/bin/phpdoc -d ./src -t ./build/docs
 
 after_script:
  ## Coveralls
