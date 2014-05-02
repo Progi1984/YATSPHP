@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "Progi1984/YATSPHP" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "Progi1984/YATSPHP" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "5.5" ]; then
 
   echo -e "Publishing PHPDoc...\n"
 

@@ -53,7 +53,7 @@ after_script:
  ## Coveralls
  - php vendor/bin/coveralls -v
  ## PHPDocumentor
- - ./.travis_shell_after_success.sh
+ - "./.travis_shell_after_success.sh"
 
 notifications:
   email:
