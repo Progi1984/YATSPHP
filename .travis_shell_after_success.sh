@@ -17,11 +17,18 @@ if [ "$TRAVIS_REPO_SLUG" == "Progi1984/YATSPHP" ] && [ "$TRAVIS_PULL_REQUEST" ==
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/Progi1984/YATSPHP gh-pages > /dev/null
 
   cd gh-pages
+  echo "--DEBUG : Suppression"
+  git rm -rf ./docs/$TRAVIS_BRANCH
+
+  echo "--DEBUG : Dossier"
   mkdir docs
   cd docs
-  git rm -rf ./$TRAVIS_BRANCH
   mkdir $TRAVIS_BRANCH
+
+  echo "--DEBUG : Copie"
   cp -Rf $HOME/docs-latest ./$TRAVIS_BRANCH
+
+  echo "--DEBUG : Git"
   git add -f .
   git commit -m "PHPDocumentor (Travis Build : $TRAVIS_BUILD_NUMBER  - Branch : $TRAVIS_BRANCH)"
   git push -fq origin gh-pages > /dev/null
