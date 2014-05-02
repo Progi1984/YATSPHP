@@ -32,7 +32,6 @@ before_script:
   - curl -o mageekguy.atoum.phar http://downloads.atoum.org/nightly/mageekguy.atoum.phar
   ## PHPDocumentor
   - mkdir -p build/docs
-  - composer update -n --prefer-source --dev
 
 script:
   ## PHP_CodeSniffer

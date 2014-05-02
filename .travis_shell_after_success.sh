@@ -17,6 +17,8 @@ if [ "$TRAVIS_REPO_SLUG" == "Progi1984/YATSPHP" ] && [ "$TRAVIS_PULL_REQUEST" ==
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/Progi1984/YATSPHP gh-pages > /dev/null
 
   cd gh-pages
+  git rm -rf ./$TRAVIS_BRANCH
+  mkdir docs
   cd docs
   git rm -rf ./$TRAVIS_BRANCH
   cp -Rf $HOME/docs-latest ./$TRAVIS_BRANCH
