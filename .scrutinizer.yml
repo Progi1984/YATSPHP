@@ -1,0 +1,14 @@
+filter:
+    excluded_paths: [ 'vendor/*', 'tests/*', 'samples/*' ]
+
+before_commands:
+    - "composer self-update"
+    - "composer install --prefer-source --dev"
+
+tools:
+    php_code_coverage:
+        enabled: true
+        test_command: php mageekguy.atoum.phar -d tests/ -c .atoum.php
+    php_sim: true
+    php_pdepend: true
+    php_analyzer: true
