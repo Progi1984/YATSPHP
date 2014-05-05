@@ -16,6 +16,12 @@ class YATSPHP
     private $levelImbrication = 0;
     private $renderSectionAutohide = 'no';
 
+    /**
+     * @param $psFilename
+     * @param null $psDocRoot
+     * @param null $psSearchPath
+     * @return $this|null
+     */
     public function define($psFilename, $psDocRoot = null, $psSearchPath = null)
     {
         if (is_null($psDocRoot) && substr($psFilename, 0, 1) != DIRECTORY_SEPARATOR) {
@@ -45,6 +51,11 @@ class YATSPHP
         return null;
     }
 
+    /**
+     * @param $key
+     * @param null $value
+     * @return $this
+     */
     public function assign($key, $value = null)
     {
         if (is_array($key) == true) {
