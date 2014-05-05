@@ -2,6 +2,10 @@
 
 namespace Progi1984;
 
+/**
+ * Class YATSPHP
+ * @package Progi1984
+ */
 class YATSPHP
 {
     private $docroot;
