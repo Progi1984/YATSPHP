@@ -54,12 +54,18 @@ class YATSPHP
         }
         return $this;
     }
-  
+
+    /**
+     * @return array
+     */
     public function getVariables()
     {
         return $this->vars;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getSections()
     {
         return $this->hiddenSection;
