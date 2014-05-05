@@ -1,4 +1,5 @@
 filter:
+    paths: [src/*]
     excluded_paths: [ 'vendor/*', 'tests/*', 'samples/*' ]
 
 before_commands:
@@ -6,9 +7,15 @@ before_commands:
     - "composer install --prefer-source --dev"
 
 tools:
-    php_code_coverage:
-        enabled: true
-        test_command: php mageekguy.atoum.phar -d tests/ -c .atoum.php
-    php_sim: true
+    external_code_coverage: true
+    php_mess_detector: true
+    php_code_sniffer: true
+    sensiolabs_security_checker: true
+    php_code_coverage: true
     php_pdepend: true
-    php_analyzer: true
+    php_loc:
+        enabled: true
+        excluded_dirs: [vendor, samples, tests]
+    php_cpd:
+        enabled: true
+        excluded_dirs: [vendor, samples, tests]
