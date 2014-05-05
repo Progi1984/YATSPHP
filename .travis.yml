@@ -51,6 +51,9 @@ script:
 after_script:
  ## Coveralls
  - php vendor/bin/coveralls -v
+ ## Scrutinizer
+ - wget https://scrutinizer-ci.com/ocular.phar
+ - php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
  ## PHPDocumentor
  - bash .travis_shell_after_success.sh
 
