@@ -19,7 +19,7 @@
     "require-dev": {
         "phpdocumentor/phpdocumentor":"2.*",
         "satooshi/php-coveralls": "dev-master",
-        "squizlabs/php_codesniffer":"*"
+        "squizlabs/php_codesniffer": "1.*"
     },
     "autoload": {
         "psr-0": {
