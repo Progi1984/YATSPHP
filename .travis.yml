@@ -12,6 +12,7 @@ env:
 before_script:
   ## Composer
   - composer selfupdate --quiet
+  - composer update
   - composer install -n --prefer-source --dev
   ## PHP Copy/Paste Detector
   - curl -o phpcpd.phar https://phar.phpunit.de/phpcpd.phar
