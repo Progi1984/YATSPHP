@@ -17,8 +17,9 @@
         "php": ">=5.3.0"
     },
     "require-dev": {
+        "phpdocumentor/phpdocumentor":"2.*",
         "satooshi/php-coveralls": "dev-master",
-        "phpdocumentor/phpdocumentor":"2.*"
+        "squizlabs/php_codesniffer":"*"
     },
     "autoload": {
         "psr-0": {
