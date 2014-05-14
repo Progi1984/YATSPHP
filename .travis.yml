@@ -13,9 +13,6 @@ before_script:
   ## Composer
   - composer selfupdate --quiet
   - composer install -n --prefer-source --dev
-  ## PHP_CodeSniffer
-  - pyrus install pear/PHP_CodeSniffer
-  - phpenv rehash
   ## PHP Copy/Paste Detector
   - curl -o phpcpd.phar https://phar.phpunit.de/phpcpd.phar
   ## PHP Mess Detector
